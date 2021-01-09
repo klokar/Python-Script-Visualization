@@ -24,6 +24,18 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::resource('processor','ProcessorController',
+        ['only' => ['index', 'create', 'store', 'destroy']]
+    );
+
+    Route::resource('dataset','DatasetController',
+        ['only' => ['index', 'create', 'store', 'destroy']]
+    );
+
+    Route::get('execution', 'ExecutionController@index')->name('execution');
+//    Route::get('execution/report', 'ExecutionController@report');
+//    Route::resource('execution','ExecutionController',
+//        ['only' => ['index', 'create', 'store', 'destroy']]
+//    );
+});
