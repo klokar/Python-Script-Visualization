@@ -17,6 +17,7 @@ mix.js('resources/js/app.js', 'public/js').vue()
         require('tailwindcss'),
         require('autoprefixer'),
     ])
+    .copyDirectory('resources/images', 'public/images')
     .webpackConfig(require('./webpack.config'));
 
 if (mix.inProduction()) {

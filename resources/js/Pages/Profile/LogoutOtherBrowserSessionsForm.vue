@@ -1,16 +1,17 @@
 <template>
     <jet-action-section>
         <template #title>
-            Browser Sessions
+            Seje v brskalnikih
         </template>
 
         <template #description>
-            Manage and logout your active sessions on other browsers and devices.
+            Urejajte in odjavite aktivne seje na ostalih brskalnikih in napravah.
         </template>
+
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                If necessary, you may logout of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
+                Če je potrebno, se lahko tukaj odjavite iz vseh sej na brskalnikih ter napravah. Zadnje aktivne seje so tudi naštete spodaj.
             </div>
 
             <!-- Other Browser Sessions -->
@@ -35,8 +36,8 @@
                             <div class="text-xs text-gray-500">
                                 {{ session.ip_address }},
 
-                                <span class="text-green-500 font-semibold" v-if="session.is_current_device">This device</span>
-                                <span v-else>Last active {{ session.last_active }}</span>
+                                <span class="text-green-500 font-semibold" v-if="session.is_current_device">Ta naprava</span>
+                                <span v-else>Zadnje videna {{ session.last_active }}</span>
                             </div>
                         </div>
                     </div>
@@ -45,25 +46,25 @@
 
             <div class="flex items-center mt-5">
                 <jet-button @click.native="confirmLogout">
-                    Logout Other Browser Sessions
+                    Odjavi seje na ostalih brskalnikih
                 </jet-button>
 
                 <jet-action-message :on="form.recentlySuccessful" class="ml-3">
-                    Done.
+                    Končaj.
                 </jet-action-message>
             </div>
 
             <!-- Logout Other Devices Confirmation Modal -->
             <jet-dialog-modal :show="confirmingLogout" @close="closeModal">
                 <template #title>
-                    Logout Other Browser Sessions
+                    Potrditev
                 </template>
 
                 <template #content>
-                    Please enter your password to confirm you would like to logout of your other browser sessions across all of your devices.
+                    Prosimo vnesite vaše geslo, da potrdite odjavo iz ostalih brskalnikov na napravah.
 
                     <div class="mt-4">
-                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Password"
+                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Geslo"
                                     ref="password"
                                     v-model="form.password"
                                     @keyup.enter.native="logoutOtherBrowserSessions" />
@@ -74,11 +75,11 @@
 
                 <template #footer>
                     <jet-secondary-button @click.native="closeModal">
-                        Nevermind
+                        Prekliči
                     </jet-secondary-button>
 
                     <jet-button class="ml-2" @click.native="logoutOtherBrowserSessions" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Logout Other Browser Sessions
+                        Odjavi seje na ostalih brskalnikih
                     </jet-button>
                 </template>
             </jet-dialog-modal>
