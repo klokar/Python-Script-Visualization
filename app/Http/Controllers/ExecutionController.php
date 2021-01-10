@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Inertia\Inertia;
-use Inertia\Response;
 use App\Models\Dataset;
 use App\Models\Execution;
 use App\Models\DataProcessor;
@@ -16,13 +13,17 @@ use App\Http\Requests\CreateExecutionRequest;
 class ExecutionController extends Controller
 {
     /**
-     * @return Response
+     * @return View
      */
     public function index()
     {
-        return Inertia::render('Execution', [
-            'executions' => Execution::with('dataProcessor', 'dataset')->orderByDesc('id')->get()
-        ]);
+        return view('execution.list')
+            ->with(
+                'executions',
+                Execution::with('dataProcessor', 'dataset')
+                    ->orderByDesc('id')
+                    ->paginate(10)
+            );
     }
 
     /**
