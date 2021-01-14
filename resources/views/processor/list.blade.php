@@ -1,72 +1,67 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Seznam naloženih programov
+        </h2>
+        @component('components.ibutton', ['url' => '/processor/create', 'fa' => 'fa-plus', 'text' => 'Naloži'])
+        @endcomponent
+    </x-slot>
 
-@section('title', 'Nalaganje programa')
-
-@section('breadcrumbs')
-    <ul>
-        <li><a class="active" href="/processor">Programi</a></li>
-    </ul>
-@endsection
-
-@section('breadcrumbs-button')
-    <a href="/processor/create" class="btn btn-primary"><i class="fa fa-plus"></i>Naloži</a>
-@endsection
-
-@section('content')
-    <div class="box">
-        <div class="box-header">Seznam naloženih programov</div>
-        <div class="box-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <th>Ime</th>
-                        <th>Algoritem</th>
-                        <th>Pot programa</th>
-                        <th>Pot podatkov</th>
-                        <th>Pot rezultatov</th>
-                        <th>Naloženo</th>
-                        <th>Akcije</th>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-5 sm:p-6">
+                <table class="container table-auto mb-4">
+                    <thead class="border-b">
+                        <th class="text-left pb-5">Ime</th>
+                        <th class="text-left pb-5">Algoritem</th>
+                        <th class="text-left pb-5">Pot programa</th>
+                        <th class="text-left pb-5">Pot podatkov</th>
+                        <th class="text-left pb-5">Pot rezultatov</th>
+                        <th class="text-left pb-5">Naloženo</th>
+                        <th class="text-left pb-5">Akcije</th>
                     </thead>
                     <tbody>
-                        @foreach ($processors as $processor)
-                            <tr>
-                                <td>{{ $processor->name }}</td>
-                                <td>{{ $processor->algorithm }}</td>
-                                <td>{{ $processor->processor_path }}</td>
-                                <td>{{ $processor->dataset_path }}</td>
-                                <td>{{ $processor->results_path }}</td>
-                                <td>{{ $processor->created_at->format('d.m.Y') }}</td>
-                                <td><data-processor-actions processor-id={{$processor->id}}></data-processor-actions></td>
-                            </tr>
-                        @endforeach
+                    @foreach ($processors as $processor)
+                        <tr class="border-t">
+                            <td class="py-2">{{ $processor->name }}</td>
+                            <td class="py-2">{{ $processor->algorithm }}</td>
+                            <td class="py-2">{{ $processor->processor_path }}</td>
+                            <td class="py-2">{{ $processor->dataset_path }}</td>
+                            <td class="py-2">{{ $processor->results_path }}</td>
+                            <td class="py-2">{{ $processor->created_at->format('d.m.Y') }}</td>
+                            <td class="py-2"><data-processor-actions processor-id={{$processor->id}}></data-processor-actions></td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
+                {{ $processors->links() }}
             </div>
         </div>
     </div>
-    <div class="box">
-        <div class="box-header">Seznam dependencijev</div>
-        <div class="box-body">
-            @if(empty($dependencies))
-                <div>Dependenciji niso naloženi ali pa je napaka v datoteki!</div>
-            @else
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <th>Ime</th>
-                        <th>Verzija</th>
+    <div class="pb-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-5 sm:p-6">
+                <div class="py-4">Seznam dependencijev</div>
+                @if(empty($dependencies))
+                    <div class="container">Dependenciji niso naloženi ali pa je napaka v datoteki!</div>
+                @else
+                    <table class="container table-auto mb-4">
+                        <thead class="border-b">
+                            <th class="text-left pb-5">Ime</th>
+                            <th class="text-left pb-5">Verzija</th>
                         </thead>
                         <tbody>
                         @foreach ($dependencies as $name => $version)
-                            <tr>
-                                <td>{{ $name }}</td>
-                                <td>{{ $version }}</td>
+                            <tr class="border-t">
+                                <td class="py-2">{{ $name }}</td>
+                                <td class="py-2">{{ $version }}</td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
     </div>
-@endsection
+</x-app-layout>
+

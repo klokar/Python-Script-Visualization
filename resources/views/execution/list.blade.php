@@ -5,8 +5,6 @@
         </h2>
         @component('components.ibutton', ['url' => '/execution/create', 'fa' => 'fa-plus', 'text' => 'Novo izvajanje'])
         @endcomponent
-{{--        @ibutton(['url' => '/execution/create', 'fa' => 'fa-plus', 'text' => 'Novo izvajanje'])--}}
-{{--        @endibutton--}}
     </x-slot>
 
     <div class="py-12">

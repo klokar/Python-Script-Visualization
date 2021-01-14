@@ -1,43 +1,38 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Seznam podatkov
+        </h2>
+        @component('components.ibutton', ['url' => '/dataset/create', 'fa' => 'fa-plus', 'text' => 'Naloži'])
+        @endcomponent
+    </x-slot>
 
-@section('title', 'Seznam podatkov')
-
-@section('breadcrumbs')
-    <ul>
-        <li><a class="active" href="/dataset">Seznam podatkov</a></li>
-    </ul>
-@endsection
-
-@section('breadcrumbs-button')
-    <a href="/dataset/create" class="btn btn-primary"><i class="fa fa-plus"></i>Naloži</a>
-@endsection
-
-@section('content')
-    <div class="box">
-        <div class="box-header">Seznam naloženih podatkov</div>
-        <div class="box-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <th>Ime</th>
-                        <th>Ime datoteke</th>
-                        <th>Velikost</th>
-                        <th>Naloženo</th>
-                        <th>Akcije</th>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-5 sm:p-6">
+                <table class="container table-auto mb-4">
+                    <thead class="border-b">
+                        <th class="text-left pb-5">Ime</th>
+                        <th class="text-left pb-5">Ime datoteke</th>
+                        <th class="text-left pb-5">Velikost</th>
+                        <th class="text-left pb-5">Naloženo</th>
+                        <th class="text-left pb-5">Akcije</th>
                     </thead>
                     <tbody>
-                        @foreach ($datasets as $dataset)
-                            <tr>
-                                <td>{{ $dataset->name }}</td>
-                                <td>{{ $dataset->original_name }}</td>
-                                <td>{{ $dataset->formatted_size }}</td>
-                                <td>{{ $dataset->created_at->format('d.m.Y H:i') }}</td>
-                                <td><dataset-actions dataset-id={{$dataset->id}}></dataset-actions></td>
-                            </tr>
-                        @endforeach
+                    @foreach ($datasets as $dataset)
+                        <tr class="border-t">
+                            <td class="py-2">{{ $dataset->name }}</td>
+                            <td class="py-2">{{ $dataset->original_name }}</td>
+                            <td class="py-2">{{ $dataset->formatted_size }}</td>
+                            <td class="py-2">{{ $dataset->created_at->format('d.m.Y H:i') }}</td>
+                            <td class="py-2"><dataset-actions dataset-id={{$dataset->id}}></dataset-actions></td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
+                {{ $datasets->links() }}
             </div>
         </div>
     </div>
-@endsection
+</x-app-layout>
+

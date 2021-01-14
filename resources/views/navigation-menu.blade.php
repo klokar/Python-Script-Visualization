@@ -13,7 +13,13 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('execution.index') }}" :active="request()->routeIs('execution.index')">
-                        {{ __('Izvajanja') }}
+                        Izvajanja
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('processor.index') }}" :active="request()->routeIs('processor.index')">
+                        Programi
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('dataset.index') }}" :active="request()->routeIs('dataset.index')">
+                        Podatki
                     </x-jet-nav-link>
                 </div>
             </div>

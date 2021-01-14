@@ -1,19 +1,16 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Nalaganje podatkov
+        </h2>
+    </x-slot>
 
-@section('title', 'Nalaganje podatkov')
-
-@section('breadcrumbs')
-    <ul>
-        <li><a href="/dataset">Seznam podatkov</a></li>
-        <li><a class="active" href="/">Nalaganje</a></li>
-    </ul>
-@endsection
-
-@section('content')
-    <div class="box">
-        <div class="box-header">Nalaganje podatkov</div>
-        <div class="box-body">
-            <dataset-upload></dataset-upload>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-5 sm:p-6">
+                @livewire('dataset.upload-form')
+            </div>
         </div>
     </div>
-@endsection
+</x-app-layout>
+

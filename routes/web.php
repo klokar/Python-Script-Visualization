@@ -26,7 +26,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ['only' => ['index', 'create', 'store', 'destroy']]
     );
 
-//    Route::get('execution', 'ExecutionController@index')->name('execution');
     Route::get('execution/report', 'ExecutionController@report');
     Route::resource('execution','ExecutionController',
         ['only' => ['index', 'create', 'store', 'destroy']]

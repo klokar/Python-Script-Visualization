@@ -20,7 +20,7 @@ class ProcessorController extends Controller
         $dependencies = $dependencyService->parseDependencies();
 
         return view('processor.list', [
-            'processors' => DataProcessor::all(),
+            'processors' => DataProcessor::paginate(10),
             'dependencies' => $dependencies
         ]);
     }

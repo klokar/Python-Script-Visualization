@@ -14,8 +14,7 @@ class DatasetController extends Controller
      */
     public function index()
     {
-        logger()->debug('d', ['d' => Dataset::all()]);
-        return view('dataset.list')->with('datasets', Dataset::all());
+        return view('dataset.list')->with('datasets', Dataset::paginate(10));
     }
 
     /**
