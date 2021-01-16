@@ -22,8 +22,8 @@ class CreateExecutionsTable extends Migration
             $table->string('parameters')->nullable();
             $table->timestamps();
 
-            $table->foreign('data_processor_id')->references('id')->on('data_processors');
-            $table->foreign('dataset_id')->references('id')->on('datasets');
+            $table->foreign('data_processor_id')->references('id')->on('data_processors')->onDelete('cascade');
+            $table->foreign('dataset_id')->references('id')->on('datasets')->onDelete('cascade');
         });
     }
 

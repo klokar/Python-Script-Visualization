@@ -25,7 +25,9 @@
                             <td class="py-2">{{ $dataset->original_name }}</td>
                             <td class="py-2">{{ $dataset->formatted_size }}</td>
                             <td class="py-2">{{ $dataset->created_at->format('d.m.Y H:i') }}</td>
-                            <td class="py-2"><dataset-actions dataset-id={{$dataset->id}}></dataset-actions></td>
+                            <td class="py-2">
+                                @livewire('dataset.delete', ['dataset_id' => $dataset->id])
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

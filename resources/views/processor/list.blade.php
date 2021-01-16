@@ -29,7 +29,9 @@
                             <td class="py-2">{{ $processor->dataset_path }}</td>
                             <td class="py-2">{{ $processor->results_path }}</td>
                             <td class="py-2">{{ $processor->created_at->format('d.m.Y') }}</td>
-                            <td class="py-2"><data-processor-actions processor-id={{$processor->id}}></data-processor-actions></td>
+                            <td class="py-2">
+                                @livewire('processor.delete', ['processor_id' => $processor->id])
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
