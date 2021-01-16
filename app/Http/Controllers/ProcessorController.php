@@ -26,54 +26,10 @@ class ProcessorController extends Controller
     }
 
     /**
-     * @param  int  $id
-     * @return View
-     */
-    public function show($id)
-    {
-        // TODO
-        return view('user.profile', ['user' => User::findOrFail($id)]);
-    }
-
-    /**
      * @return View
      */
     public function create()
     {
         return view('processor.upload');
-    }
-
-    /**
-     * @param  int  $id
-     *
-     * @return int
-     */
-    public function destroy($id)
-    {
-        return DataProcessor::destroy([$id]);
-    }
-
-    /**
-     * @param UploadProcessorRequest $request
-     *
-     * @return RedirectResponse
-     */
-    public function store(UploadProcessorRequest $request)
-    {
-        $file = $request->file('file');
-        $path = $file->store(DataProcessor::STORAGE_PATH);
-        $fileType = DataProcessor::getAlgorithmFromExtension($file->extension());
-
-        DataProcessor::create([
-            'name' => $request->get('name'),
-            'path' => $path,
-            'algorithm' => $fileType,
-            'processor_path' => $request->get('processor_path'),
-            'dataset_path' => $request->get('dataset_path'),
-            'results_path' => $request->get('results_path'),
-        ]);
-
-        return redirect()
-            ->to('processor');
     }
 }

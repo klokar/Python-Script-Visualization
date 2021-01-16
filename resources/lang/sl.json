@@ -41,7 +41,8 @@
     "Email Password Reset Link": "Pošlji E-mail s povezavo za ponastavitev",
     "A new verification link has been sent to the email address you provided during registration.": "E-mail s potrditveno povezavo je bil poslan na naslov, ki ste ga navedli ob registraciji.",
     "Delete entry": "Brisanje vnosa",
-    "Are you sure you sure? This will also delete connected executions!": "Ste prepričani? Izbrisana bodo tudi vsa povezana izvajanja!",
+    "Are you sure you sure?": "Ali ste prepričani?",
+    "Are you sure you sure? This will also delete connected executions!": "Ali ste prepričani? Izbrisana bodo tudi vsa povezana izvajanja!",
     "Delete": "Izbriši",
     "ssssss": "b"
 }

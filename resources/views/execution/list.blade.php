@@ -25,7 +25,15 @@
                             <td class="py-2">{{ $execution->dataset->name }}</td>
                             <td class="py-2">{{ $execution->comment }}</td>
                             <td class="py-2">{{ $execution->created_at->format('d.m.Y H:i') }}</td>
-                            <td class="py-2"><extension-actions execution-id={{$execution->id}}></extension-actions></td>
+                            <td class="py-2 flex">
+                                @component('components.ibutton', [
+                                    'url' => '/execution/show',
+                                    'fa' => 'fa-eye',
+                                    'text' => '',
+                                    'color' => 'yellow',
+                                ])@endcomponent
+                                @livewire('execution.delete', ['execution_id' => $execution->id])
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

@@ -43,33 +43,4 @@ class ExecutionController extends Controller
     {
         return view('execution.create', ['processors' => DataProcessor::all(), 'datasets' => Dataset::all()]);
     }
-
-    /**
-     * @param  int  $id
-     *
-     * @return int
-     */
-    public function destroy($id)
-    {
-        return Execution::destroy([$id]);
-    }
-
-    /**
-     * @param CreateExecutionRequest $request
-     * @param ExecutionService       $executionService
-     *
-     * @return RedirectResponse
-     */
-    public function store(CreateExecutionRequest $request, ExecutionService $executionService)
-    {
-        $executionService->createAndRun(
-            $request->get('data_processor_id'),
-            $request->get('dataset_id'),
-            $request->get('comment'),
-            $request->get('parameters')
-        );
-
-//        return redirect()
-//            ->to('execution');
-    }
 }

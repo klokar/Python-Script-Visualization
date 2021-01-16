@@ -19,15 +19,15 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('processor','ProcessorController',
-        ['only' => ['index', 'create', 'store', 'destroy']]
+        ['only' => ['index', 'create']]
     );
 
     Route::resource('dataset','DatasetController',
-        ['only' => ['index', 'create', 'store', 'destroy']]
+        ['only' => ['index', 'create']]
     );
 
     Route::get('execution/report', 'ExecutionController@report');
     Route::resource('execution','ExecutionController',
-        ['only' => ['index', 'create', 'store', 'destroy']]
+        ['only' => ['index', 'create', 'show']]
     );
 });
