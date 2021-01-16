@@ -15,12 +15,16 @@ class CreateForm extends Component
 
     public $data_processor_id;
     public $dataset_id;
+    public $dataset_ev_id;
+    public $test_set_size;
     public $comment;
     public $parameters;
 
     protected $rules = [
         'data_processor_id' => 'required|exists:data_processors,id',
         'dataset_id' => 'required|exists:datasets,id',
+        'dataset_ev_id' => 'required|exists:datasets,id',
+        'test_set_size' => 'required|numeric|min:1|max:100',
         'comment' => 'nullable|string',
         'parameters' => 'nullable|string',
     ];
@@ -35,12 +39,15 @@ class CreateForm extends Component
         $this->validateOnly($propertyName);
     }
 
-    public function createExecution(ExecutionService $executionService) {
+    public function createExecution(ExecutionService $executionService)
+    {
         $this->validate();
 
-        $executionService->createAndRun(
+        $executionService->create(
             $this->data_processor_id,
             $this->dataset_id,
+            $this->dataset_ev_id,
+            $this->test_set_size,
             $this->comment,
             $this->parameters,
         );

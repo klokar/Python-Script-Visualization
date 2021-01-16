@@ -19,6 +19,7 @@ class ProcessorController extends Controller
     {
         $dependencies = $dependencyService->parseDependencies();
 
+//        $fileType = DataProcessor::getAlgorithmFromExtension($this->file->extension());
         return view('processor.list', [
             'processors' => DataProcessor::paginate(10),
             'dependencies' => $dependencies

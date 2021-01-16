@@ -10,38 +10,44 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string        $hash
  * @property int           $data_processor_id
  * @property int           $dataset_id
+ * @property int           $dataset_ev_id
+ * @property int           $test_set_size
  * @property string|null   $comment
  * @property string|null   $parameters
  * @property Carbon        $created_at
  * @property Carbon        $updated_at
  * @property DataProcessor $dataProcessor
  * @property Dataset       $dataset
+ * @property Dataset       $datasetEv
  */
 class Execution extends Model
 {
+    public const PROCESSOR_FILENAME = 'program.py';
+    public const DATASET_FILENAME = 'data.csv';
+    public const DATASET_EV_FILENAME = 'data_ev.csv';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'hash', 'data_processor_id', 'dataset_id', 'comment', 'parameters', 'created_at', 'updated_at',
+        'hash', 'data_processor_id', 'dataset_id', 'dataset_ev_id', 'test_set_size', 'comment', 'parameters', 'created_at', 'updated_at',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function dataProcessor(): BelongsTo
     {
         return $this->belongsTo(DataProcessor::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function dataset(): BelongsTo
     {
-        return $this->belongsTo(Dataset::class);
+        return $this->belongsTo(Dataset::class, 'dataset_id');
+    }
+
+    public function datasetEv(): BelongsTo
+    {
+        return $this->belongsTo(Dataset::class, 'dataset_ev_id');
     }
 
     public function storagePath(): string
@@ -66,32 +72,48 @@ class Execution extends Model
         // In case of not using VENV -> return 'python3';
     }
 
-    public function processorPath(): string
-    {
-        $processorFilename = $this->dataProcessor->filename;
-
-        // Append custom execution path if exists
-        $processorExecutionPath = $this->dataProcessor->processor_path;
-        if (!empty($processorExecutionPath)) {
-            $processorFilename = sprintf('%s/%s', $processorExecutionPath, $processorFilename);
-        }
-
-        return sprintf('%s/%s', $this->shortPath(), $processorFilename);
-    }
-
-    public function shortPath(): string
+    public function basePath(): string // executions/hash
     {
         return sprintf('executions/%s', $this->hash);
     }
 
-    public function datasetPath(): string
+    public function executionPath(): string // executions/hash/iris
     {
-        // Set path to original name if execution path not present
-        $datasetExecutionPath = $this->dataProcessor->dataset_path;
-        if (empty($datasetExecutionPath)) {
-            $datasetExecutionPath = $this->dataset->original_name;
-        }
+        return sprintf('%s/%s', $this->basePath(), $this->dataProcessor->e_path);
+    }
 
-        return sprintf('%s/%s', $this->shortPath(), $datasetExecutionPath);
+    public function executionShortPath(): string // iris
+    {
+        return $this->dataProcessor->e_path;
+    }
+
+    public function processorPath(): string // executions/hash/iris/program.py
+    {
+        return sprintf('%s/%s', $this->executionPath(), self::PROCESSOR_FILENAME);
+    }
+
+    public function processorShortPath(): string // iris/program.py
+    {
+        return sprintf('%s/%s', $this->executionShortPath(), self::PROCESSOR_FILENAME);
+    }
+
+    public function datasetPath(): string // executions/hash/iris/data.csv
+    {
+        return sprintf('%s/%s', $this->executionPath(), self::DATASET_FILENAME);
+    }
+
+    public function datasetShortPath(): string // iris/data.csv
+    {
+        return sprintf('%s/%s', $this->executionShortPath(), self::DATASET_FILENAME);
+    }
+
+    public function datasetEvPath(): string // executions/hash/iris/data_ev.csv
+    {
+        return sprintf('%s/%s', $this->executionPath(), self::DATASET_EV_FILENAME);
+    }
+
+    public function datasetEvShortPath(): string // iris/data_ev.csv
+    {
+        return sprintf('%s/%s', $this->executionShortPath(), self::DATASET_EV_FILENAME);
     }
 }

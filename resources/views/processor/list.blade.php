@@ -13,10 +13,10 @@
                 <table class="container table-auto mb-4">
                     <thead class="border-b">
                         <th class="text-left pb-5">Ime</th>
-                        <th class="text-left pb-5">Algoritem</th>
-                        <th class="text-left pb-5">Pot programa</th>
-                        <th class="text-left pb-5">Pot podatkov</th>
-                        <th class="text-left pb-5">Pot rezultatov</th>
+                        <th class="text-left pb-5">Osnovna pot / direktorij</th>
+                        <th class="text-left pb-5">Rezultati (.png)</th>
+                        <th class="text-left pb-5">Rezultati (.csv)</th>
+                        <th class="text-left pb-5">Nivoji SVM</th>
                         <th class="text-left pb-5">Naloženo</th>
                         <th class="text-left pb-5">Akcije</th>
                     </thead>
@@ -24,10 +24,10 @@
                     @foreach ($processors as $processor)
                         <tr class="border-t">
                             <td class="py-2">{{ $processor->name }}</td>
-                            <td class="py-2">{{ $processor->algorithm }}</td>
-                            <td class="py-2">{{ $processor->processor_path }}</td>
-                            <td class="py-2">{{ $processor->dataset_path }}</td>
-                            <td class="py-2">{{ $processor->results_path }}</td>
+                            <td class="py-2">{{ $processor->e_path }}</td>
+                            <td class="py-2">{{ $processor->e_path_result_figures }}</td>
+                            <td class="py-2">{{ $processor->e_path_result_data }}</td>
+                            <td class="py-2">{{ $processor->level }}</td>
                             <td class="py-2">{{ $processor->created_at->format('d.m.Y') }}</td>
                             <td class="py-2">
                                 @livewire('processor.delete', ['processor_id' => $processor->id])

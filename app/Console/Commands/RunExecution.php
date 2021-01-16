@@ -41,9 +41,9 @@ class RunExecution extends Command
      */
     public function handle(ExecutionService $executionService)
     {
-        $execution = Execution::find(5);
+        $execution = Execution::find(1);
 //        $executionService->prepareRequirements($execution);
 
-        $executionService->run($execution);
+        $executionService->run($execution, true);
     }
 }

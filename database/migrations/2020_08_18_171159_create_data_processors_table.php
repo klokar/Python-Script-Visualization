@@ -17,11 +17,13 @@ class CreateDataProcessorsTable extends Migration
             $table->id();
             $table->string('name', 100);
             $table->string('path');
-            $table->string('algorithm', 20);
-            $table->string('processor_path')->nullable();
-            $table->string('dataset_path')->nullable();
-            $table->string('dataset_filename')->nullable();
-            $table->string('results_path')->nullable();
+            $table->string('e_path');
+            $table->string('e_path_result_figures');
+            $table->string('e_path_result_data');
+            $table->string('e_path_program_details')->nullable();
+            $table->string('e_path_evaluation_details')->nullable();
+            $table->tinyInteger('level');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

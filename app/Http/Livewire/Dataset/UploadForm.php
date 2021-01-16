@@ -12,10 +12,12 @@ class UploadForm extends Component
 
     public $name;
     public $file;
+    public $comment;
 
     protected $rules = [
         'name' => 'required|string',
         'file' => 'required|file',
+        'comment' => 'nullable|string',
     ];
 
     public function render()
@@ -23,7 +25,8 @@ class UploadForm extends Component
         return view('livewire.dataset.upload-form');
     }
 
-    public function uploadDataset() {
+    public function uploadDataset()
+    {
         $this->validate();
 
         $path = $this->file->store('datasets');
@@ -33,6 +36,7 @@ class UploadForm extends Component
             'original_name' => $this->file->getClientOriginalName(),
             'path' => $path,
             'size' => $this->file->getSize(),
+            'comment' => $this->comment,
         ]);
 
         return redirect()

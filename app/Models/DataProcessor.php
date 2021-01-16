@@ -6,16 +6,18 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property string $name
- * @property string $path
- * @property string $filename
- * @property string $algorithm
- * @property string|null $processor_path
- * @property string|null $dataset_path
- * @property string|null $dataset_filename
- * @property string|null $results_path
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property string      $name
+ * @property string      $path
+ * @property string      $filename
+ * @property string      $e_path
+ * @property string      $e_path_result_figures
+ * @property string      $e_path_result_data
+ * @property string|null $e_path_program_details
+ * @property string|null $e_path_evaluation_details
+ * @property integer     $level
+ * @property string|null $comment
+ * @property Carbon      $created_at
+ * @property Carbon      $updated_at
  */
 class DataProcessor extends Model
 {
@@ -27,13 +29,9 @@ class DataProcessor extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'path', 'algorithm', 'processor_path', 'dataset_path', 'dataset_filename', 'results_path'
+        'name', 'path', 'e_path', 'e_path_result_figures', 'e_path_result_data', 'e_path_program_details',
+        'e_path_evaluation_details', 'level', 'comment'
     ];
-
-    public function getFilenameAttribute(): string
-    {
-        return explode(self::STORAGE_PATH.'/', $this->path)[1];
-    }
 
     /**
      * @param string $extension
@@ -44,11 +42,16 @@ class DataProcessor extends Model
     {
         switch ($extension) {
             case "py":
-                return "pyhon";
+                return "python script";
             case "ipynb":
                 return "jupyter notebook";
             default:
                 return null;
         }
+    }
+
+    public function getFilenameAttribute(): string
+    {
+        return explode(self::STORAGE_PATH . '/', $this->path)[1];
     }
 }

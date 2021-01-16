@@ -6,13 +6,14 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property string $name
- * @property string $original_name
- * @property string $path
- * @property int    $size
- * @property string $formatted_size
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property string      $name
+ * @property string      $original_name
+ * @property string      $path
+ * @property int         $size
+ * @property string      $formatted_size
+ * @property string|null $comment
+ * @property Carbon      $created_at
+ * @property Carbon      $updated_at
  */
 class Dataset extends Model
 {
@@ -22,7 +23,7 @@ class Dataset extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'original_name', 'path', 'size',
+        'name', 'original_name', 'path', 'size', 'comment',
     ];
 
     public function getFormattedSizeAttribute(): string

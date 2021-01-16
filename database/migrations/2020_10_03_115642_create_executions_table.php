@@ -18,12 +18,15 @@ class CreateExecutionsTable extends Migration
             $table->string('hash');
             $table->unsignedBigInteger('data_processor_id');
             $table->unsignedBigInteger('dataset_id');
-            $table->text('comment')->nullable();
+            $table->unsignedBigInteger('dataset_ev_id');
+            $table->tinyInteger('test_set_size');
             $table->string('parameters')->nullable();
+            $table->text('comment')->nullable();
             $table->timestamps();
 
             $table->foreign('data_processor_id')->references('id')->on('data_processors')->onDelete('cascade');
             $table->foreign('dataset_id')->references('id')->on('datasets')->onDelete('cascade');
+            $table->foreign('dataset_ev_id')->references('id')->on('datasets')->onDelete('cascade');
         });
     }
 

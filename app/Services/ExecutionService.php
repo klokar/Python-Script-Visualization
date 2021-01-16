@@ -10,10 +10,18 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ExecutionService
 {
-    public function createAndRun(int $processorId, int $datasetId, ?string $comment, ?string $parameters, bool $displayTrace = false): void
+    public function createAndRun(
+        int $processorId,
+        int $datasetId,
+        int $datasetEvaluationId,
+        int $testSetSize,
+        ?string $comment,
+        ?string $parameters,
+        bool $displayTrace = false
+    ): void
     {
         try {
-            $execution = $this->create($processorId, $datasetId, $comment, $parameters);
+            $execution = $this->create($processorId, $datasetId, $datasetEvaluationId, $testSetSize, $comment, $parameters);
             $this->run($execution, $displayTrace);
 
         } catch (Exception $e) {
@@ -24,21 +32,54 @@ class ExecutionService
     /**
      * @param int         $processorId
      * @param int         $datasetId
+     * @param int         $datasetEvaluationId
+     * @param int         $testSetSize
      * @param string|null $comment
      * @param string|null $parameters
      *
      * @return Execution
      * @throws Exception
      */
-    protected function create(int $processorId, int $datasetId, ?string $comment, ?string $parameters): Execution
+    public function create(
+        int $processorId,
+        int $datasetId,
+        int $datasetEvaluationId,
+        int $testSetSize,
+        ?string $comment,
+        ?string $parameters
+    ): Execution
     {
         return Execution::create([
             'hash' => bin2hex(random_bytes(16)),
             'data_processor_id' => $processorId,
             'dataset_id' => $datasetId,
+            'dataset_ev_id' => $datasetEvaluationId,
+            'test_set_size' => $testSetSize,
             'comment' => $comment,
             'parameters' => $parameters,
         ]);
+    }
+
+    public function run(Execution $execution, bool $displayTrace = false): void
+    {
+        try {
+            $this->deleteExecutionDir($execution);
+            $this->createVirtualEnvironment($execution, $displayTrace);
+            $this->prepareStorage($execution);
+            $this->prepareRequirements($execution, $displayTrace);
+//            $this->execute($execution, $displayTrace);
+
+        } catch (Exception $e) {
+            logger()->error($e);
+        } finally {
+            $this->disconnectVirtualEnvironment($execution);
+        }
+    }
+
+    protected function deleteExecutionDir(Execution $execution): void
+    {
+        // Delete old execution dir
+        Storage::deleteDirectory($execution->basePath());
     }
 
     protected function createVirtualEnvironment(Execution $execution, bool $displayTrace = false): void
@@ -47,7 +88,7 @@ class ExecutionService
             'python3',
             '-m',
             'venv',
-            $execution->venvPath()
+            $execution->venvPath(),
         ]);
         $this->runProcess($process, $displayTrace);
 
@@ -57,27 +98,35 @@ class ExecutionService
             'install',
             '--upgrade',
             'pip',
-            'setuptools'
+            'setuptools',
         ]);
         $this->runProcess($process, $displayTrace);
     }
 
-    public function disconnectVirtualEnvironment(Execution $execution, bool $displayTrace = false): void
+    protected function runProcess(Process $process, bool $displayTrace = false): void
     {
-        try {
-            $process = new Process([
-                'rm',
-                '-rf',
-                $execution->venvPath()
-            ]);
-            $this->runProcess($process, $displayTrace);
-        } catch (Exception $e){}
+        if ($displayTrace) {
+            $this->displayTrace($process);
+        } else {
+            $process->run();
+        }
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
     }
 
-    protected function deleteExecutionDir(Execution $execution): void
+    protected function displayTrace(Process $process)
     {
-        // Delete old execution dir
-        Storage::deleteDirectory($execution->shortPath());
+        $process->start();
+
+        foreach ($process as $type => $data) {
+            if ($process::OUT === $type) {
+                echo "\nRead from stdout: " . $data;
+            } else { // $process::ERR === $type
+                echo "\nRead from stderr: " . $data;
+            }
+        }
     }
 
     protected function prepareStorage(Execution $execution)
@@ -85,8 +134,9 @@ class ExecutionService
         // Processor
         Storage::put($execution->processorPath(), Storage::get($execution->dataProcessor->path));
 
-        // Dataset
+        // Datasets
         Storage::put($execution->datasetPath(), Storage::get($execution->dataset->path));
+        Storage::put($execution->datasetEvPath(), Storage::get($execution->datasetEv->path));
     }
 
     public function prepareRequirements(Execution $execution, bool $displayTrace = false, int $timeout = 15)
@@ -111,24 +161,20 @@ class ExecutionService
         $this->runProcess($process, $displayTrace);
     }
 
-    protected function runProcess(Process $process, bool $displayTrace = false): void
-    {
-        if ($displayTrace) {
-            $this->displayTrace($process);
-        } else {
-            $process->run();
-        }
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-    }
-
     public function execute(Execution $execution, bool $displayTrace = false, int $timeout = 5): void
     {
         $process = new Process([
             $execution->pythonPath(),
-            $execution->dataProcessor->filename,
+            $execution->processorShortPath(),
+            '-i',
+            $execution->datasetShortPath(),
+            '-o',
+            $execution->datasetEvShortPath(),
+            $execution->dataProcessor->e_path,
+            $execution->dataProcessor->e_path_result_figures,
+            $execution->dataProcessor->e_path_result_data,
+            $execution->dataProcessor->level,
+            $execution->test_set_size
         ]);
 
         $process->setWorkingDirectory($execution->storagePath());
@@ -136,31 +182,16 @@ class ExecutionService
         $this->runProcess($process, $displayTrace);
     }
 
-    public function run(Execution $execution, bool $displayTrace = false): void
+    public function disconnectVirtualEnvironment(Execution $execution, bool $displayTrace = false): void
     {
         try {
-            $this->deleteExecutionDir($execution);
-            $this->createVirtualEnvironment($execution, $displayTrace);
-            $this->prepareStorage($execution);
-            $this->prepareRequirements($execution, $displayTrace);
-            $this->execute($execution, $displayTrace);
-
+            $process = new Process([
+                'rm',
+                '-rf',
+                $execution->venvPath(),
+            ]);
+            $this->runProcess($process, $displayTrace);
         } catch (Exception $e) {
-            logger()->error($e);
-        } finally {
-            $this->disconnectVirtualEnvironment($execution);
-        }
-    }
-
-    protected function displayTrace(Process $process) {
-        $process->start();
-
-        foreach ($process as $type => $data) {
-            if ($process::OUT === $type) {
-                echo "\nRead from stdout: " . $data;
-            } else { // $process::ERR === $type
-                echo "\nRead from stderr: " . $data;
-            }
         }
     }
 }

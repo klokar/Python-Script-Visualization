@@ -12,16 +12,24 @@ class UploadForm extends Component
 
     public $name;
     public $file;
-    public $processor_path;
-    public $dataset_path;
-    public $results_path;
+    public $e_path;
+    public $e_path_result_figures;
+    public $e_path_result_data;
+    public $e_path_program_details;
+    public $e_path_evaluation_details;
+    public $level;
+    public $comment;
 
     protected $rules = [
         'name' => 'required|string',
         'file' => 'required|file',
-        'processor_path' => 'nullable|string',
-        'dataset_path' => 'nullable|string',
-        'results_path' => 'nullable|string',
+        'e_path' => 'required|string',
+        'e_path_result_figures' => 'required|string',
+        'e_path_result_data' => 'required|string',
+        'e_path_program_details' => 'nullable|string',
+        'e_path_evaluation_details' => 'nullable|string',
+        'level' => 'required|integer',
+        'comment' => 'nullable|string',
     ];
 
     public function render()
@@ -29,19 +37,22 @@ class UploadForm extends Component
         return view('livewire.processor.upload-form');
     }
 
-    public function uploadProcessor() {
+    public function uploadProcessor()
+    {
         $this->validate();
 
         $path = $this->file->store(DataProcessor::STORAGE_PATH);
-        $fileType = DataProcessor::getAlgorithmFromExtension($this->file->extension());
 
         DataProcessor::create([
             'name' => $this->name,
             'path' => $path,
-            'algorithm' => $fileType,
-            'processor_path' => $this->processor_path,
-            'dataset_path' => $this->dataset_path,
-            'results_path' => $this->results_path,
+            'e_path' => $this->e_path,
+            'e_path_result_figures' => $this->e_path_result_figures,
+            'e_path_result_data' => $this->e_path_result_data,
+            'e_path_program_details' => $this->e_path_program_details,
+            'e_path_evaluation_details' => $this->e_path_evaluation_details,
+            'level' => $this->level,
+            'comment' => $this->comment,
         ]);
 
         return redirect()

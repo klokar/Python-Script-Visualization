@@ -19,6 +19,7 @@ class CreateDatasetsTable extends Migration
             $table->string('original_name');
             $table->string('path');
             $table->integer('size');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }
