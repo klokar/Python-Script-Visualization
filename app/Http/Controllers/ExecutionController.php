@@ -43,4 +43,13 @@ class ExecutionController extends Controller
     {
         return view('execution.create', ['processors' => DataProcessor::all(), 'datasets' => Dataset::all()]);
     }
+
+    /**
+     * @param $id
+     * @return View
+     */
+    public function output($id)
+    {
+        return view('execution.output', ['output' => Execution::findOrFail($id)->output()]);
+    }
 }

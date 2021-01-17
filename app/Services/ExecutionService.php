@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use App\Models\Output;
 use App\Models\Execution;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
@@ -67,7 +68,7 @@ class ExecutionService
             $this->createVirtualEnvironment($execution, $displayTrace);
             $this->prepareStorage($execution);
             $this->prepareRequirements($execution, $displayTrace);
-//            $this->execute($execution, $displayTrace);
+            $this->execute($execution, $displayTrace);
 
         } catch (Exception $e) {
             logger()->error($e);
@@ -76,10 +77,18 @@ class ExecutionService
         }
     }
 
+    protected function writeOutput(Execution $execution, string $output, $level = Output::DEBUG): void
+    {
+        echo "\n".$output;
+        $output = new Output($output, $level);
+        Storage::append($execution->outputPath(), $output->write());
+    }
+
     protected function deleteExecutionDir(Execution $execution): void
     {
         // Delete old execution dir
         Storage::deleteDirectory($execution->basePath());
+        $this->writeOutput($execution, 'Created directory: '.$execution->basePath());
     }
 
     protected function createVirtualEnvironment(Execution $execution, bool $displayTrace = false): void
@@ -90,7 +99,8 @@ class ExecutionService
             'venv',
             $execution->venvPath(),
         ]);
-        $this->runProcess($process, $displayTrace);
+        $this->runProcess($execution, $process, $displayTrace);
+        $this->writeOutput($execution, 'Created python virtual environment: '.$execution->venvPath());
 
         // Update pip as some requirements need latest version
         $process = new Process([
@@ -100,31 +110,33 @@ class ExecutionService
             'pip',
             'setuptools',
         ]);
-        $this->runProcess($process, $displayTrace);
+        $this->runProcess($execution, $process, $displayTrace);
+        $this->writeOutput($execution, 'Upgraded pip and setuptools');
     }
 
-    protected function runProcess(Process $process, bool $displayTrace = false): void
+    protected function runProcess(Execution $execution, Process $process, bool $displayTrace = false): void
     {
         if ($displayTrace) {
-            $this->displayTrace($process);
+            $this->displayTrace($execution, $process);
         } else {
             $process->run();
         }
 
         if (!$process->isSuccessful()) {
+            $this->writeOutput($execution, 'Process failed: '.$process->getOutput(), Output::ERROR);
             throw new ProcessFailedException($process);
         }
     }
 
-    protected function displayTrace(Process $process)
+    protected function displayTrace(Execution $execution, Process $process)
     {
         $process->start();
 
         foreach ($process as $type => $data) {
             if ($process::OUT === $type) {
-                echo "\nRead from stdout: " . $data;
+                $this->writeOutput($execution, 'STDOUT: '.$data);
             } else { // $process::ERR === $type
-                echo "\nRead from stderr: " . $data;
+                $this->writeOutput($execution, 'STDERR: '.$data, Output::ERROR);
             }
         }
     }
@@ -137,6 +149,12 @@ class ExecutionService
         // Datasets
         Storage::put($execution->datasetPath(), Storage::get($execution->dataset->path));
         Storage::put($execution->datasetEvPath(), Storage::get($execution->datasetEv->path));
+
+        // Result directories
+        Storage::makeDirectory($execution->resultFiguresPath());
+        Storage::makeDirectory($execution->resultDataPath());
+
+        $this->writeOutput($execution, 'Storage prepared: '.implode(',', Storage::directories($execution->basePath(), true)));
     }
 
     public function prepareRequirements(Execution $execution, bool $displayTrace = false, int $timeout = 15)
@@ -158,28 +176,43 @@ class ExecutionService
 
         $process->setWorkingDirectory($execution->storagePath());
         $process->setTimeout(60 * $timeout);
-        $this->runProcess($process, $displayTrace);
+        $this->runProcess($execution, $process, $displayTrace);
+
+        $this->writeOutput($execution, 'Requirements handled: '.$requirementsPath);
     }
 
     public function execute(Execution $execution, bool $displayTrace = false, int $timeout = 5): void
     {
-        $process = new Process([
+        $commands = [
             $execution->pythonPath(),
             $execution->processorShortPath(),
             '-i',
             $execution->datasetShortPath(),
             '-o',
             $execution->datasetEvShortPath(),
-            $execution->dataProcessor->e_path,
-            $execution->dataProcessor->e_path_result_figures,
-            $execution->dataProcessor->e_path_result_data,
+            $execution->executionShortPath(),
+            $execution->resultFiguresShortPath(),
+            $execution->resultDataShortPath(),
             $execution->dataProcessor->level,
-            $execution->test_set_size
-        ]);
+            $execution->test_set_size,
+        ];
 
+        if (!empty($execution->parameters)) {
+            foreach (explode(',', $execution->parameters) as $parameter) {
+                if (strpos($parameter, '=') !== false) { // test=123
+                    $commands = array_merge($commands, explode('=', $parameter));
+                } else {
+                    $commands[] = $parameter;
+                }
+            }
+        }
+
+        $process = new Process($commands);
         $process->setWorkingDirectory($execution->storagePath());
         $process->setTimeout(60 * $timeout);
-        $this->runProcess($process, $displayTrace);
+        $this->runProcess($execution, $process, $displayTrace);
+
+        $this->writeOutput($execution, 'Execution complete: '.implode(',', $commands), Output::SUCCESS);
     }
 
     public function disconnectVirtualEnvironment(Execution $execution, bool $displayTrace = false): void
@@ -190,8 +223,10 @@ class ExecutionService
                 '-rf',
                 $execution->venvPath(),
             ]);
-            $this->runProcess($process, $displayTrace);
+            $this->runProcess($execution, $process, $displayTrace);
+            $this->writeOutput($execution, 'Disconnected python virtual environment');
         } catch (Exception $e) {
+            $this->writeOutput($execution, 'Disconnected python virtual environment', Output::ERROR);
         }
     }
 }

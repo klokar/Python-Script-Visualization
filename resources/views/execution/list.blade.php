@@ -32,7 +32,16 @@
                                     'url' => '/execution/show',
                                     'fa' => 'fa-eye',
                                     'text' => '',
-                                    'color' => 'yellow',
+                                    'color' => 'green',
+                                    'class' => 'mr-2'
+                                ])@endcomponent
+                                @livewire('execution.run', ['execution_id' => $execution->id])
+                                @component('components.ibutton', [
+                                    'url' => '/execution/'.$execution->id.'/output',
+                                    'fa' => 'fa-align-left',
+                                    'text' => '',
+                                    'color' => 'gray',
+                                    'class' => 'mr-2'
                                 ])@endcomponent
                                 @livewire('execution.delete', ['execution_id' => $execution->id])
                             </td>

@@ -27,8 +27,8 @@ class Delete extends Component
         $this->confirming = true;
     }
 
-    public function deleteEntry() {
-
+    public function deleteEntry()
+    {
         Execution::destroy([$this->execution_id]);
 
         return redirect()
