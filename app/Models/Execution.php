@@ -75,23 +75,6 @@ class Execution extends Model
         return storage_path(sprintf('app/executions/%s', $this->hash));
     }
 
-    public function venvPath(): string
-    {
-        return sprintf('%s/env', $this->storagePath());
-    }
-
-    public function pipPath(): string
-    {
-        return sprintf('%s/bin/pip3', $this->venvPath());
-        // In case of not using VENV -> return 'pip3';
-    }
-
-    public function pythonPath(): string
-    {
-        return sprintf('%s/bin/python3', $this->venvPath());
-        // In case of not using VENV -> return 'python3';
-    }
-
     public function basePath(): string // executions/hash
     {
         return sprintf('executions/%s', $this->hash);

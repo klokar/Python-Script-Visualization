@@ -4,36 +4,21 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Execution;
+use App\Traits\ProcessRunner;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ExecutionService
 {
-    protected $out;
+    use ProcessRunner;
 
-    public function __construct(OutputService $outputService)
+    protected $out;
+    protected $executor;
+
+    public function __construct(OutputService $outputService, PythonService $pythonService)
     {
         $this->out = $outputService;
-    }
-
-    public function createAndRun(
-        int $processorId,
-        int $datasetId,
-        int $datasetEvaluationId,
-        int $testSetSize,
-        ?string $comment,
-        ?string $parameters,
-        bool $displayTrace = false
-    ): void
-    {
-        try {
-            $execution = $this->create($processorId, $datasetId, $datasetEvaluationId, $testSetSize, $comment, $parameters);
-            $this->run($execution, $displayTrace);
-
-        } catch (Exception $e) {
-            logger()->error($e);
-        }
+        $this->executor = $pythonService;
     }
 
     /**
@@ -71,15 +56,12 @@ class ExecutionService
     {
         try {
             $this->deleteExecutionDir($execution);
-            $this->createVirtualEnvironment($execution, $displayTrace);
+            $this->executor->prepare($execution, $displayTrace);
             $this->prepareStorage($execution);
-            $this->prepareRequirements($execution, $displayTrace);
             $this->execute($execution, $displayTrace);
 
         } catch (Exception $e) {
             logger()->error($e);
-        } finally {
-            $this->disconnectVirtualEnvironment($execution);
         }
     }
 
@@ -88,56 +70,6 @@ class ExecutionService
         // Delete old execution dir
         Storage::deleteDirectory($execution->basePath());
         $this->out->success($execution, 'Created directory: '.$execution->basePath());
-    }
-
-    protected function createVirtualEnvironment(Execution $execution, bool $displayTrace = false): void
-    {
-        $process = new Process([
-            'python3',
-            '-m',
-            'venv',
-            $execution->venvPath(),
-        ]);
-        $this->runProcess($execution, $process, $displayTrace);
-        $this->out->success($execution, 'Created python virtual environment: '.$execution->venvPath());
-
-        // Update pip as some requirements need latest version
-        $process = new Process([
-            $execution->pipPath(),
-            'install',
-            '--upgrade',
-            'pip',
-            'setuptools',
-        ]);
-        $this->runProcess($execution, $process, $displayTrace);
-        $this->out->success($execution, 'Upgraded pip and setuptools');
-    }
-
-    protected function runProcess(Execution $execution, Process $process, bool $displayTrace = false): void
-    {
-        if ($displayTrace) {
-            $this->displayTrace($execution, $process);
-        } else {
-            $process->run();
-        }
-
-        if (!$process->isSuccessful()) {
-            $this->out->error($execution, 'Process failed: '.$process->getOutput());
-            throw new ProcessFailedException($process);
-        }
-    }
-
-    protected function displayTrace(Execution $execution, Process $process)
-    {
-        $process->start();
-
-        foreach ($process as $type => $data) {
-            if ($process::OUT === $type) {
-                $this->out->debug($execution, 'STDOUT: '.$data);
-            } else { // $process::ERR === $type
-                $this->out->error($execution, 'STDERR: '.$data);
-            }
-        }
     }
 
     protected function prepareStorage(Execution $execution)
@@ -166,34 +98,10 @@ class ExecutionService
         );
     }
 
-    public function prepareRequirements(Execution $execution, bool $displayTrace = false, int $timeout = 15)
-    {
-        // Storage dir should be owned by root:root - chown -R root:root storage/
-        $cachePath = storage_path('app/dependencies/cache');
-        $requirementsPath = storage_path('app/dependencies/requirements.txt');
-
-        // If want to copy dependencies to current dir add '-t', './',
-        $process = new Process([
-            $execution->pipPath(),
-            'install',
-            '--cache-dir',
-            $cachePath,
-            '-r',
-            $requirementsPath,
-            '--disable-pip-version-check',
-        ]);
-
-        $process->setWorkingDirectory($execution->storagePath());
-        $process->setTimeout(60 * $timeout);
-        $this->runProcess($execution, $process, $displayTrace);
-
-        $this->out->success($execution, 'Requirements handled: '.$requirementsPath);
-    }
-
     public function execute(Execution $execution, bool $displayTrace = false, int $timeout = 5): void
     {
         $commands = [
-            $execution->pythonPath(),
+            $this->executor->getExecutable(),
             $execution->processorShortPath(),
             '-i',
             $execution->datasetShortPath(),
@@ -219,23 +127,8 @@ class ExecutionService
         $process = new Process($commands);
         $process->setWorkingDirectory($execution->storagePath());
         $process->setTimeout(60 * $timeout);
-        $this->runProcess($execution, $process, $displayTrace);
+        $this->runProcess($execution, $process, $this->out, $displayTrace);
 
         $this->out->success($execution, 'Execution complete: '.implode(',', $commands));
-    }
-
-    public function disconnectVirtualEnvironment(Execution $execution, bool $displayTrace = false): void
-    {
-        try {
-            $process = new Process([
-                'rm',
-                '-rf',
-                $execution->venvPath(),
-            ]);
-            $this->runProcess($execution, $process, $displayTrace);
-            $this->out->success($execution, 'Disconnected python virtual environment');
-        } catch (Exception $e) {
-            $this->out->error($execution, 'Disconnected python virtual environment');
-        }
     }
 }

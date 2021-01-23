@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Execution;
 use Illuminate\Console\Command;
 use App\Services\ExecutionService;
+use Illuminate\Support\Facades\Artisan;
 
 class RunExecution extends Command
 {
@@ -13,7 +14,7 @@ class RunExecution extends Command
      *
      * @var string
      */
-    protected $signature = 'execution:run';
+    protected $signature = 'execution:run {id}';
 
     /**
      * The console command description.
@@ -41,7 +42,7 @@ class RunExecution extends Command
      */
     public function handle(ExecutionService $executionService)
     {
-        $execution = Execution::find(1);
+        $execution = Execution::find($this->argument('id'));
         $executionService->run($execution, true);
     }
 }

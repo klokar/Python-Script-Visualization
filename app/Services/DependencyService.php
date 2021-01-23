@@ -8,14 +8,12 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class DependencyService
 {
-    const DEFAULT_FILE_PATH = 'dependencies/requirements.txt';
-
     /** @var string */
     protected $filePath;
 
-    public function __construct($filePath = self::DEFAULT_FILE_PATH)
+    public function __construct(PythonService $pythonService)
     {
-        $this->filePath = $filePath;
+        $this->filePath = $pythonService->requirementsBasePath();
     }
 
     public function parseDependencies(): Collection
@@ -23,7 +21,7 @@ class DependencyService
         $dependencyCollection = new Collection();
 
         try {
-            $dependencyFile = Storage::disk('local')->get('dependencies/requirements.txt');
+            $dependencyFile = Storage::get($this->filePath);
             $dependencyArray = explode(PHP_EOL, $dependencyFile);
 
             foreach ($dependencyArray as $item) {
