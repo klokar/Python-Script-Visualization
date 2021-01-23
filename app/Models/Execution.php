@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * @property int           $id
  * @property string        $hash
  * @property int           $data_processor_id
  * @property int           $dataset_id
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int           $test_set_size
  * @property string|null   $comment
  * @property string|null   $parameters
+ * @property int           $status
  * @property Carbon        $created_at
  * @property Carbon        $updated_at
  * @property DataProcessor $dataProcessor
@@ -23,6 +25,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Execution extends Model
 {
+    public const STATUS_CREATED = 0;
+    public const STATUS_QUEUED = 1;
+    public const STATUS_STARTED = 2;
+    public const STATUS_COMPLETE = 3;
+    public const STATUS_ERROR = 4;
+
     public const PROCESSOR_FILENAME = 'program.py';
     public const DATASET_FILENAME = 'data.csv';
     public const DATASET_EV_FILENAME = 'data_ev.csv';
@@ -34,7 +42,7 @@ class Execution extends Model
      * @var array
      */
     protected $fillable = [
-        'hash', 'data_processor_id', 'dataset_id', 'dataset_ev_id', 'test_set_size', 'comment', 'parameters', 'created_at', 'updated_at',
+        'hash', 'data_processor_id', 'dataset_id', 'dataset_ev_id', 'test_set_size', 'comment', 'parameters', 'status', 'created_at', 'updated_at',
     ];
 
     public function dataProcessor(): BelongsTo
@@ -50,6 +58,11 @@ class Execution extends Model
     public function datasetEv(): BelongsTo
     {
         return $this->belongsTo(Dataset::class, 'dataset_ev_id');
+    }
+
+    public function setStatus(int $status): void
+    {
+        $this->update(['status' => $status]);
     }
 
     public function output(): array

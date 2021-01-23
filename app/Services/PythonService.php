@@ -47,13 +47,8 @@ class PythonService implements ProgramExecutorServiceInterface
 
     public function prepare(Execution $execution, bool $displayTrace = false): void
     {
-        try {
-            $this->createVirtualEnvironment($execution, $displayTrace);
-            $this->prepareRequirements($execution, $displayTrace);
-
-        } catch (Exception $e) {
-            logger()->error($e);
-        }
+        $this->createVirtualEnvironment($execution, $displayTrace);
+        $this->prepareRequirements($execution, $displayTrace);
     }
 
     protected function createVirtualEnvironment(Execution $execution, bool $displayTrace = false): void

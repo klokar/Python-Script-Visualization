@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Execution;
 use App\Traits\ProcessRunner;
 use Illuminate\Support\Facades\Storage;
@@ -49,19 +50,26 @@ class ExecutionService
             'test_set_size' => $testSetSize,
             'comment' => $comment,
             'parameters' => $parameters,
+            'status' => Execution::STATUS_CREATED
         ]);
     }
 
     public function run(Execution $execution, bool $displayTrace = false): void
     {
         try {
+            $execution->setStatus(Execution::STATUS_STARTED);
+
             $this->deleteExecutionDir($execution);
             $this->executor->prepare($execution, $displayTrace);
             $this->prepareStorage($execution);
             $this->execute($execution, $displayTrace);
 
+            $this->out->success($execution, 'COMPLETED: '.Carbon::now()->toDateTimeString());
+            $execution->setStatus(Execution::STATUS_COMPLETE);
         } catch (Exception $e) {
             logger()->error($e);
+            $this->out->error($execution, 'ERROR: '.$e->getMessage());
+            $execution->setStatus(Execution::STATUS_ERROR);
         }
     }
 
@@ -69,6 +77,7 @@ class ExecutionService
     {
         // Delete old execution dir
         Storage::deleteDirectory($execution->basePath());
+        $this->out->success($execution, 'STARTED: '.Carbon::now()->toDateTimeString());
         $this->out->success($execution, 'Created directory: '.$execution->basePath());
     }
 
@@ -129,6 +138,6 @@ class ExecutionService
         $process->setTimeout(60 * $timeout);
         $this->runProcess($execution, $process, $this->out, $displayTrace);
 
-        $this->out->success($execution, 'Execution complete: '.implode(',', $commands));
+        $this->out->success($execution, 'Execution complete: '.implode(' ', $commands));
     }
 }

@@ -35,7 +35,6 @@
                                     'color' => 'green',
                                     'class' => 'mr-2'
                                 ])@endcomponent
-                                @livewire('execution.run', ['execution_id' => $execution->id])
                                 @component('components.ibutton', [
                                     'url' => '/execution/'.$execution->id.'/output',
                                     'fa' => 'fa-align-left',
@@ -43,6 +42,7 @@
                                     'color' => 'gray',
                                     'class' => 'mr-2'
                                 ])@endcomponent
+                                @livewire('execution.run', ['execution_id' => $execution->id])
                                 @livewire('execution.delete', ['execution_id' => $execution->id])
                             </td>
                         </tr>

@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Execution;
 
 use Livewire\Component;
 use App\Models\Execution;
-use App\Services\ExecutionService;
 use Illuminate\Support\Facades\Artisan;
 
 class Run extends Component
@@ -20,11 +19,13 @@ class Run extends Component
         return view('livewire.execution.run');
     }
 
-    public function run(ExecutionService $executionService)
+    public function run()
     {
-//        $execution = Execution::findOrFail($this->execution_id);
-//        $executionService->run($execution, true);
-        Artisan::queue('execution:run', ['id' => $this->execution_id]);
+        /** @var Execution $execution */
+        $execution = Execution::find($this->execution_id);
+        $execution->setStatus(Execution::STATUS_QUEUED);
+
+        Artisan::queue('execution:run', ['id' => $execution->id]);
 
         return redirect()
             ->to("execution/$this->execution_id/output");

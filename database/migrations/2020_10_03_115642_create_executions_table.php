@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Execution;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +23,7 @@ class CreateExecutionsTable extends Migration
             $table->tinyInteger('test_set_size');
             $table->string('parameters')->nullable();
             $table->text('comment')->nullable();
+            $table->tinyInteger('status')->default(Execution::STATUS_CREATED);
             $table->timestamps();
 
             $table->foreign('data_processor_id')->references('id')->on('data_processors')->onDelete('cascade');

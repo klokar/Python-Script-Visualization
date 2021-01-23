@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dataset;
 use App\Models\Execution;
 use App\Models\DataProcessor;
-use App\Services\ExecutionService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\CreateExecutionRequest;
 
 class ExecutionController extends Controller
 {
@@ -27,7 +24,8 @@ class ExecutionController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
+     *
      * @return View
      */
     public function show($id)
@@ -46,10 +44,13 @@ class ExecutionController extends Controller
 
     /**
      * @param $id
+     *
      * @return View
      */
     public function output($id)
     {
-        return view('execution.output', ['output' => Execution::findOrFail($id)->output()]);
+        $execution = Execution::findOrFail($id);
+
+        return view('execution.output', ['output' => $execution->output(), 'execution' => $execution]);
     }
 }
