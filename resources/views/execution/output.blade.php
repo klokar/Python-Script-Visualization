@@ -11,11 +11,11 @@
                 @foreach ($output as $line)
                     <div class="overflow-ellipsis overflow-hidden ...">
                         @if($line->level === "E")
-                            <span class="text-red-500">> {!! $line->message !!}</span>
+                            ><span class="text-red-500"> {!! $line->message !!}</span>
                         @elseif($line->level === "S")
-                            <span class="text-green-500">> {!! $line->message !!}</span>
+                            ><span style="color: #58e810"> {!! $line->message !!}</span>
                         @else
-                            <span>> {!! $line->message !!}</span>
+                            ><span> {!! $line->message !!}</span>
                         @endif
                     </div>
                 @endforeach
@@ -23,3 +23,9 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    window.setTimeout(function () {
+        window.location.reload();
+    }, 15000);
+</script>
