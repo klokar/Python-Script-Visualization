@@ -16,6 +16,7 @@ class CreateExecutionsTable extends Migration
     {
         Schema::create('executions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('hash');
             $table->unsignedBigInteger('data_processor_id');
             $table->unsignedBigInteger('dataset_id');
@@ -26,6 +27,7 @@ class CreateExecutionsTable extends Migration
             $table->tinyInteger('status')->default(Execution::STATUS_CREATED);
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('data_processor_id')->references('id')->on('data_processors')->onDelete('cascade');
             $table->foreign('dataset_id')->references('id')->on('datasets')->onDelete('cascade');
             $table->foreign('dataset_ev_id')->references('id')->on('datasets')->onDelete('cascade');

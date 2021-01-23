@@ -13,8 +13,8 @@
                 <table class="container table-auto mb-4">
                     <thead class="border-b">
                         <th class="text-left pb-5">Ime programa</th>
-                        <th class="text-left pb-5">Naslov podatkov</th>
-                        <th class="text-left pb-5">Naslov podatkov za evalvacijo</th>
+                        <th class="text-left pb-5">Podatki</th>
+                        <th class="text-left pb-5">Podatki za evalvacijo</th>
                         <th class="text-left pb-5">Komentar</th>
                         <th class="text-left pb-5">Datum</th>
                         <th class="text-left pb-5">Akcije</th>
@@ -29,7 +29,7 @@
                             <td class="py-2">{{ $execution->created_at->format('d.m.Y H:i') }}</td>
                             <td class="py-2 flex">
                                 @component('components.ibutton', [
-                                    'url' => '/execution/show',
+                                    'url' => '/execution/'.$execution->id,
                                     'fa' => 'fa-eye',
                                     'text' => '',
                                     'color' => 'green',

@@ -5,7 +5,7 @@
         </h2>
         <div class="flex">
             @component('components.ibutton', [
-                'url' => '/execution/show',
+                'url' => '/execution/'.$execution->id,
                 'fa' => 'fa-eye',
                 'text' => '',
                 'color' => 'green',

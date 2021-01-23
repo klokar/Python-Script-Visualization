@@ -28,16 +28,16 @@
             <x-jet-input id="program-path-result-data" type="text" class="mt-1 block w-full" wire:model.lazy="e_path_result_data"/>
             <x-jet-input-error for="e_path_result_data" class="mt-2" />
         </div>
-        <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="e_path_program_details" value="Datoteka s podatki o programu in podatkih (.json) - opcijsko" />
-            <x-jet-input id="program-program-data" type="text" class="mt-1 block w-full" wire:model.lazy="e_path_program_details"/>
-            <x-jet-input-error for="e_path_program_details" class="mt-2" />
-        </div>
-        <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="e_path_evaluation_details" value="Datoteka s podatki o evalvaciji (.json) - opcijsko" />
-            <x-jet-input id="program-evaluation-data" type="text" class="mt-1 block w-full" wire:model.lazy="e_path_evaluation_details"/>
-            <x-jet-input-error for="e_path_evaluation_details" class="mt-2" />
-        </div>
+{{--        <div class="col-span-6 sm:col-span-4">--}}
+{{--            <x-jet-label for="e_path_program_details" value="Datoteka s podatki o programu in podatkih (.json) - opcijsko" />--}}
+{{--            <x-jet-input id="program-program-data" type="text" class="mt-1 block w-full" wire:model.lazy="e_path_program_details"/>--}}
+{{--            <x-jet-input-error for="e_path_program_details" class="mt-2" />--}}
+{{--        </div>--}}
+{{--        <div class="col-span-6 sm:col-span-4">--}}
+{{--            <x-jet-label for="e_path_evaluation_details" value="Datoteka s podatki o evalvaciji (.json) - opcijsko" />--}}
+{{--            <x-jet-input id="program-evaluation-data" type="text" class="mt-1 block w-full" wire:model.lazy="e_path_evaluation_details"/>--}}
+{{--            <x-jet-input-error for="e_path_evaluation_details" class="mt-2" />--}}
+{{--        </div>--}}
         <div class="col-span-6 sm:col-span-4">
             <x-jet-label for="level" value="Število nivojev SVM" />
             @component('components.input-select', ['name' => 'level', 'data' => range(1, 3)])

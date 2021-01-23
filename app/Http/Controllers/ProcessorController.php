@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataProcessor;
 use Illuminate\Contracts\View\View;
 use App\Services\DependencyService;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\UploadProcessorRequest;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class ProcessorController extends Controller
 {
     /**
      * @param DependencyService $dependencyService
      *
+     * @param Authenticatable   $user
+     *
      * @return View
      */
-    public function index(DependencyService $dependencyService)
+    public function index(DependencyService $dependencyService, Authenticatable $user)
     {
-        $dependencies = $dependencyService->parseDependencies();
-
-//        $fileType = DataProcessor::getAlgorithmFromExtension($this->file->extension());
         return view('processor.list', [
-            'processors' => DataProcessor::paginate(10),
-            'dependencies' => $dependencies
+            'processors' => $user->programs()->paginate(10),
+            'dependencies' => $dependencyService->parseDependencies()
         ]);
     }
 

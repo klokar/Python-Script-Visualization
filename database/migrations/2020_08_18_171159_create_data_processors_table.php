@@ -15,6 +15,7 @@ class CreateDataProcessorsTable extends Migration
     {
         Schema::create('data_processors', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('name', 100);
             $table->string('path');
             $table->string('e_path');
@@ -25,6 +26,8 @@ class CreateDataProcessorsTable extends Migration
             $table->tinyInteger('level');
             $table->text('comment')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

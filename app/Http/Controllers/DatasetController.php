@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dataset;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\UploadDatasetRequest;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class DatasetController extends Controller
 {
     /**
+     * @param Authenticatable $user
+     *
      * @return View
      */
-    public function index()
+    public function index(Authenticatable $user)
     {
-        return view('dataset.list')->with('datasets', Dataset::paginate(10));
+        return view('dataset.list')->with('datasets', $user->datasets()->paginate(10));
     }
 
     /**

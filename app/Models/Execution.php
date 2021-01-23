@@ -34,6 +34,8 @@ class Execution extends Model
     public const PROCESSOR_FILENAME = 'program.py';
     public const DATASET_FILENAME = 'data.csv';
     public const DATASET_EV_FILENAME = 'data_ev.csv';
+    public const PROCESSING_DETAILS_FILENAME = 'data.json';
+    public const EVALUATION_DETAILS_FILENAME = 'data_ev.json';
     public const OUTPUT_FILENAME = 'output.log';
 
     /**
@@ -44,6 +46,11 @@ class Execution extends Model
     protected $fillable = [
         'hash', 'data_processor_id', 'dataset_id', 'dataset_ev_id', 'test_set_size', 'comment', 'parameters', 'status', 'created_at', 'updated_at',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function dataProcessor(): BelongsTo
     {
@@ -81,6 +88,40 @@ class Execution extends Model
         }
 
         return $output;
+    }
+
+    public function programDetails(): array
+    {
+        $data = [];
+
+        if (Storage::exists($this->detailsProcessingPath())) {
+            $data = json_decode(Storage::get($this->detailsProcessingPath()), true);
+        }
+
+        return $data;
+    }
+
+    public function evaluationDetails(): array
+    {
+        $data = [];
+
+        if (Storage::exists($this->detailsEvaluationPath())) {
+            $data = json_decode(Storage::get($this->detailsEvaluationPath()), true);
+        }
+
+        return $data;
+    }
+
+    public function resultImages(): array
+    {
+        $data = [];
+
+        if (Storage::exists($this->resultFiguresPath())) {
+            $data = Storage::allFiles($this->resultFiguresPath());
+            asort($data);
+        }
+
+        return $data;
     }
 
     public function storagePath(): string
@@ -156,5 +197,17 @@ class Execution extends Model
     public function resultDataPath(): string // executions/hash/iris/IrisResults
     {
         return sprintf('%s/%s', $this->executionPath(), $this->dataProcessor->e_path_result_data);
+    }
+
+    public function detailsProcessingPath(): string
+    {
+//        return sprintf('%s/%s', $this->basePath(), $this->dataProcessor->e_path_program_details);
+        return sprintf('%s/%s', $this->executionPath(), self::PROCESSING_DETAILS_FILENAME);
+    }
+
+    public function detailsEvaluationPath(): string
+    {
+//        return sprintf('%s/%s', $this->basePath(), $this->dataProcessor->e_path_evaluation_details);
+        return sprintf('%s/%s', $this->executionPath(), self::EVALUATION_DETAILS_FILENAME);
     }
 }
