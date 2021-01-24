@@ -114,14 +114,24 @@ class Execution extends Model
 
     public function resultImages(): array
     {
-        $data = [];
-
         if (Storage::exists($this->resultFiguresPath())) {
-            $data = Storage::allFiles($this->resultFiguresPath());
-            asort($data);
+            $urls = Storage::allFiles($this->resultFiguresPath());
+            asort($urls);
+
+            return $this->hashForURLs($urls);
         }
 
-        return $data;
+        return [];
+    }
+
+    public function hashForURLs(array $URLs)
+    {
+        $hashData = [];
+        foreach ($URLs as $url) {
+            $hashData[md5($url)] = $url;
+        }
+
+        return $hashData;
     }
 
     public function storagePath(): string

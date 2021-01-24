@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Execution;
+use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
+use App\Http\Requests\GenerateReportRequest;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class ExecutionController extends Controller
@@ -34,15 +37,12 @@ class ExecutionController extends Controller
     {
         /** @var Execution $execution */
         $execution = $user->executions()->findOrFail($id);
-        $programDetails = $execution->programDetails();
-        $evaluationDetails = $execution->evaluationDetails();
-        $images = $execution->resultImages();
 
         return view('execution.report', [
             'execution' => $execution,
-            'p_details' => $programDetails,
-            'e_details' => $evaluationDetails,
-            'images' => $images
+            'p_details' => $execution->programDetails(),
+            'e_details' => $execution->evaluationDetails(),
+            'images' => $execution->resultImages()
         ]);
     }
 
@@ -64,8 +64,48 @@ class ExecutionController extends Controller
      */
     public function output(Authenticatable $user, $id)
     {
+        /** @var Execution $execution */
         $execution = $user->executions()->findOrFail($id);
 
         return view('execution.output', ['output' => $execution->output(), 'execution' => $execution]);
+    }
+
+    /**
+     * @param GenerateReportRequest $request
+     * @param Authenticatable       $user
+     * @param                       $id
+     *
+     * @return Response|View
+     */
+    public function report(GenerateReportRequest $request, Authenticatable $user, $id)
+    {
+        /** @var Execution $execution */
+        $execution = $user->executions()->findOrFail($id);
+        $hashUrls = $execution->resultImages();
+
+        $imageTitles = [];
+        foreach ($request->getImageHashes() as $hash => $title) {
+            $imageTitles[$hashUrls[$hash]] = $title;
+        }
+
+        if($request->isDownload()) {
+            $pdf = app('snappy.pdf.wrapper')->loadView('execution.report-pdf', [
+                'title' => $request->getTitle(),
+                'description' => $request->getDescription(),
+                'images' => $imageTitles,
+                'p_details' => $execution->programDetails(),
+                'e_details' => $execution->evaluationDetails(),
+            ]);
+
+            return $pdf->download(sprintf('porocilo_%s.pdf', Carbon::now()->toDateTimeString()));
+        } else {
+            return view('execution.report-view', [
+                'title' => $request->getTitle(),
+                'description' => $request->getDescription(),
+                'images' => $imageTitles,
+                'p_details' => $execution->programDetails(),
+                'e_details' => $execution->evaluationDetails(),
+            ]);
+        }
     }
 }

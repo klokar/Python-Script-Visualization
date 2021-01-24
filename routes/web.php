@@ -28,6 +28,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('execution/report', 'ExecutionController@report');
     Route::get('execution/{id}/output', 'ExecutionController@output');
+    Route::post('execution/{id}/report', 'ExecutionController@report');
     Route::resource('execution','ExecutionController',
         ['only' => ['index', 'create', 'show']]
     );

@@ -47,14 +47,45 @@
     <div x-data="{}" class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-6 pb-6">
-                <div class="px-6 py-4 rounded-b-md text-xs text-gray uppercase bg-gray-200 tracking-widest w-max mb-6">Vizualizacija</div>
-                <div class="grid grid-flow-row grid-cols-3 grid-rows-4 gap-4">
-                    @foreach ($images as $path)
-                        <a @click="$dispatch('img-modal', {  imgModalSrc: '/{{ $path }}', imgModalDesc: '' })" class="cursor-pointer">
-                            <img alt="Slika" class="object-fit w-full" src="/{{ $path }}">
-                        </a>
-                    @endforeach
-                </div>
+                <form method="POST" action="/execution/{{ $execution->id }}/report">
+                    @csrf
+
+                    <div class="flex justify-between">
+                        <div class="px-6 py-4 rounded-b-md text-xs text-gray uppercase bg-gray-200 tracking-widest w-max mb-6">Vizualizacija in generiranje PDF poročila</div>
+                        <div>
+                            <button name="action" value="download" class="h-8 mt-4 px-4 py-2 rounded-md transition ease-in-out duration-150 font-semibold text-xs text-white uppercase tracking-widest bg-red-500">
+                                <i class="fa fa-arrow-down"></i>
+                                Prenesi
+                            </button>
+                            <button name="action" value="view" class="h-8 mt-4 px-4 py-2 rounded-md transition ease-in-out duration-150 font-semibold text-xs text-white uppercase tracking-widest bg-green-500">
+                                <i class="fa fa-eye"></i>
+                                Poglej
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="title" class="mt-2 block font-medium text-sm text-gray-700">Naslov</label>
+                        <input name="title" type="text" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                        <label for="description" class="mt-2 block font-medium text-sm text-gray-700">Besedilo</label>
+                        <textarea name="description" type="text" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                        </textarea>
+                    </div>
+                    <div class="mt-8 grid grid-flow-row grid-cols-3 grid-rows-4 gap-x-4">
+                        @foreach ($images as $hash => $path)
+                            <div>
+                                <a @click="$dispatch('img-modal', {  imgModalSrc: '/{{ $path }}', imgModalDesc: '' })" class="cursor-pointer">
+                                    <img alt="Slika" class="object-fit w-full" src="/{{ $path }}">
+                                </a>
+                                <div class="px-3 container grid grid-flow-row grid-rows-2 gap-x-2" style="grid-template-columns: 50px auto;">
+                                    <label class="mt-2 block font-medium text-sm text-gray-700">Izberi</label>
+                                    <input name="{{ $hash }}-check" type="checkbox" class="mt-2 rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                                    <label class="mt-2 block font-medium text-sm text-gray-700">Opis</label>
+                                    <input name="{{ $hash }}-title" type="text" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </form>
             </div>
         </div>
     </div>

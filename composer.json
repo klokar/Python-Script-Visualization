@@ -9,16 +9,19 @@
     "license": "MIT",
     "require": {
         "php": "^7.3",
+        "ext-json": "*",
+        "barryvdh/laravel-snappy": "^0.4.8",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "h4cc/wkhtmltoimage-amd64": "0.12.x",
+        "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "laravel/framework": "^8.12",
         "laravel/jetstream": "^2.0",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.0",
-        "symfony/process": "^5.1",
-        "ext-json": "*"
+        "symfony/process": "^5.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
