@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Execution;
 use App\Traits\ProcessRunner;
 use Illuminate\Support\Facades\Storage;
@@ -23,6 +24,7 @@ class ExecutionService
     }
 
     /**
+     * @param User        $user
      * @param int         $processorId
      * @param int         $datasetId
      * @param int         $datasetEvaluationId
@@ -34,6 +36,7 @@ class ExecutionService
      * @throws Exception
      */
     public function create(
+        User $user,
         int $processorId,
         int $datasetId,
         int $datasetEvaluationId,
@@ -42,7 +45,7 @@ class ExecutionService
         ?string $parameters
     ): Execution
     {
-        return Execution::create([
+        $execution = new Execution([
             'hash' => bin2hex(random_bytes(16)),
             'data_processor_id' => $processorId,
             'dataset_id' => $datasetId,
@@ -50,8 +53,12 @@ class ExecutionService
             'test_set_size' => $testSetSize,
             'comment' => $comment,
             'parameters' => $parameters,
-            'status' => Execution::STATUS_CREATED
+            'status' => Execution::STATUS_CREATED,
         ]);
+
+        $user->executions()->save($execution);
+
+        return $execution;
     }
 
     public function run(Execution $execution, bool $displayTrace = false): void

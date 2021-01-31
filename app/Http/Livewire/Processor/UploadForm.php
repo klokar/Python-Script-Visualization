@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Processor;
 
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\DataProcessor;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class UploadForm extends Component
 {
@@ -37,23 +39,26 @@ class UploadForm extends Component
         return view('livewire.processor.upload-form');
     }
 
-    public function uploadProcessor()
+    public function uploadProcessor(Authenticatable $user)
     {
         $this->validate();
 
         $path = $this->file->store(DataProcessor::STORAGE_PATH);
 
-        DataProcessor::create([
-            'name' => $this->name,
-            'path' => $path,
-            'e_path' => $this->e_path,
-            'e_path_result_figures' => sprintf('%s/%s', $this->e_path, $this->e_path_result_figures),
-            'e_path_result_data' => sprintf('%s/%s', $this->e_path, $this->e_path_result_data),
-            'e_path_program_details' => $this->e_path_program_details,
-            'e_path_evaluation_details' => $this->e_path_evaluation_details,
-            'level' => $this->level,
-            'comment' => $this->comment,
-        ]);
+        /** @var User $user */
+        $user->programs()->save(
+            new DataProcessor([
+                'name' => $this->name,
+                'path' => $path,
+                'e_path' => $this->e_path,
+                'e_path_result_figures' => sprintf('%s/%s', $this->e_path, $this->e_path_result_figures),
+                'e_path_result_data' => sprintf('%s/%s', $this->e_path, $this->e_path_result_data),
+                'e_path_program_details' => $this->e_path_program_details,
+                'e_path_evaluation_details' => $this->e_path_evaluation_details,
+                'level' => $this->level,
+                'comment' => $this->comment,
+            ])
+        );
 
         return redirect()
             ->to('processor');

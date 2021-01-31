@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Dataset;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Dataset;
 use Livewire\WithFileUploads;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class UploadForm extends Component
 {
@@ -25,19 +27,22 @@ class UploadForm extends Component
         return view('livewire.dataset.upload-form');
     }
 
-    public function uploadDataset()
+    public function uploadDataset(Authenticatable $user)
     {
         $this->validate();
 
         $path = $this->file->store('datasets');
 
-        Dataset::create([
-            'name' => $this->name,
-            'original_name' => $this->file->getClientOriginalName(),
-            'path' => $path,
-            'size' => $this->file->getSize(),
-            'comment' => $this->comment,
-        ]);
+        /** @var User $user */
+        $user->datasets()->save(
+            new Dataset([
+                'name' => $this->name,
+                'original_name' => $this->file->getClientOriginalName(),
+                'path' => $path,
+                'size' => $this->file->getSize(),
+                'comment' => $this->comment,
+            ])
+        );
 
         return redirect()
             ->to('dataset');

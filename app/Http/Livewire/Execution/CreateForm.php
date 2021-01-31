@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Execution;
 
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Collection;
 use App\Services\ExecutionService;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class CreateForm extends Component
 {
@@ -39,11 +41,13 @@ class CreateForm extends Component
         $this->validateOnly($propertyName);
     }
 
-    public function createExecution(ExecutionService $executionService)
+    public function createExecution(Authenticatable $user, ExecutionService $executionService)
     {
         $this->validate();
 
+        /** @var User $user */
         $executionService->create(
+            $user,
             $this->data_processor_id,
             $this->dataset_id,
             $this->dataset_ev_id,
