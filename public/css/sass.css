@@ -6280,3 +6280,26 @@ readers do not read off random characters that represent icons */
     transform: translate(24px, 0);
   }
 }
+.tooltip .tooltip-text {
+  visibility: hidden;
+  text-align: center;
+  padding: 2px 6px;
+  position: absolute;
+  z-index: 100;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  padding: 4px 6px;
+}
+.tooltip:hover .tooltip-text:before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-left: 6px solid transparent;
+  border-top: 6px solid black;
+  border-right: 6px solid transparent;
+  bottom: -6px;
+}

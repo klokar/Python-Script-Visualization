@@ -33,14 +33,16 @@
                                     'fa' => 'fa-eye',
                                     'text' => '',
                                     'color' => 'green',
-                                    'class' => 'mr-2'
+                                    'class' => 'mr-2',
+                                    'tooltip' => 'Ogled poročila'
                                 ])@endcomponent
                                 @component('components.ibutton', [
                                     'url' => '/execution/'.$execution->id.'/output',
                                     'fa' => 'fa-align-left',
                                     'text' => '',
                                     'color' => 'gray',
-                                    'class' => 'mr-2'
+                                    'class' => 'mr-2',
+                                    'tooltip' => 'Izhodni podatki'
                                 ])@endcomponent
                                 @livewire('execution.run', ['execution_id' => $execution->id])
                                 @livewire('execution.delete', ['execution_id' => $execution->id])

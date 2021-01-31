@@ -1,6 +1,7 @@
 <div>
-    <x-jet-danger-button wire:click="confirmDeletion" wire:loading.attr="disabled">
+    <x-jet-danger-button wire:click="confirmDeletion" wire:loading.attr="disabled" class="tooltip">
         <i class="fa fa-times"></i>
+        <span class='tooltip-text bg-gray-800 text-white -mt-16 ml-9 rounded'>Izbriši</span>
     </x-jet-danger-button>
     <x-jet-confirmation-modal wire:model="confirming">
         <x-slot name="title">

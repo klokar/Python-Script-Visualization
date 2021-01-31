@@ -103,3 +103,28 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
         transform: translate(24px, 0);
     }
 }
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    text-align: center;
+    padding: 2px 6px;
+    position: absolute;
+    z-index: 100;
+}
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    padding: 4px 6px;
+
+    &:before{
+        content:'';
+        display:block;
+        width:0;
+        height:0;
+        position:absolute;
+
+        border-left: 6px solid transparent;
+        border-top: 6px solid black;
+        border-right: 6px solid transparent;
+        bottom:-6px;
+    }
+}
