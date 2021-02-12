@@ -37,7 +37,7 @@ services:
       - dip-network
     restart: always
     ports:
-      - "${DB_PORT}:3306"
+      - "${DB_PORT}:${DB_PORT_EXPOSED}"
     volumes:
       - mariadb-data:/var/lib/mysql
     environment:

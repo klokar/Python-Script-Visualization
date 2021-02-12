@@ -31,6 +31,7 @@
                         @break
                     @case(2)
                     @case(3)
+                    @case(4)
                         @foreach ($output as $line)
                             <div class="overflow-ellipsis overflow-hidden ...">
                                 @if($line->level === "E")
