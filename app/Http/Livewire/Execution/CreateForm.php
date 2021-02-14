@@ -17,7 +17,6 @@ class CreateForm extends Component
 
     public $data_processor_id;
     public $dataset_id;
-    public $dataset_ev_id;
     public $test_set_size;
     public $comment;
     public $parameters;
@@ -25,7 +24,6 @@ class CreateForm extends Component
     protected $rules = [
         'data_processor_id' => 'required|exists:data_processors,id',
         'dataset_id' => 'required|exists:datasets,id',
-        'dataset_ev_id' => 'required|exists:datasets,id',
         'test_set_size' => 'required|numeric|min:1|max:100',
         'comment' => 'nullable|string',
         'parameters' => 'nullable|string',
@@ -50,7 +48,6 @@ class CreateForm extends Component
             $user,
             $this->data_processor_id,
             $this->dataset_id,
-            $this->dataset_ev_id,
             $this->test_set_size,
             $this->comment,
             $this->parameters,

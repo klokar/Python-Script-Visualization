@@ -34,12 +34,6 @@
             <x-jet-input-error for="dataset_id" class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="dataset_ev_id" value="Podatki za evalvacijo" />
-            @component('components.input-select', ['name' => 'dataset_ev_id', 'data' => $datasets, 'dataId' => 'id', 'dataName' => 'name'])
-            @endcomponent
-            <x-jet-input-error for="dataset_ev_id" class="mt-2" />
-        </div>
-        <div class="col-span-6 sm:col-span-4">
             <x-jet-label for="test_set_size" value="% testne množice" />
             @component('components.input-select', ['name' => 'test_set_size', 'data' => range(1, 100)])
             @endcomponent

@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string        $hash
  * @property int           $data_processor_id
  * @property int           $dataset_id
- * @property int           $dataset_ev_id
  * @property int           $test_set_size
  * @property string|null   $comment
  * @property string|null   $parameters
@@ -44,7 +43,7 @@ class Execution extends Model
      * @var array
      */
     protected $fillable = [
-        'hash', 'data_processor_id', 'dataset_id', 'dataset_ev_id', 'test_set_size', 'comment', 'parameters', 'status', 'created_at', 'updated_at',
+        'hash', 'data_processor_id', 'dataset_id', 'test_set_size', 'comment', 'parameters', 'status', 'created_at', 'updated_at',
     ];
 
     public function user(): BelongsTo
@@ -60,11 +59,6 @@ class Execution extends Model
     public function dataset(): BelongsTo
     {
         return $this->belongsTo(Dataset::class, 'dataset_id');
-    }
-
-    public function datasetEv(): BelongsTo
-    {
-        return $this->belongsTo(Dataset::class, 'dataset_ev_id');
     }
 
     public function setStatus(int $status): void

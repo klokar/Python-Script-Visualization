@@ -27,7 +27,6 @@ class ExecutionService
      * @param User        $user
      * @param int         $processorId
      * @param int         $datasetId
-     * @param int         $datasetEvaluationId
      * @param int         $testSetSize
      * @param string|null $comment
      * @param string|null $parameters
@@ -39,7 +38,6 @@ class ExecutionService
         User $user,
         int $processorId,
         int $datasetId,
-        int $datasetEvaluationId,
         int $testSetSize,
         ?string $comment,
         ?string $parameters
@@ -49,7 +47,6 @@ class ExecutionService
             'hash' => bin2hex(random_bytes(16)),
             'data_processor_id' => $processorId,
             'dataset_id' => $datasetId,
-            'dataset_ev_id' => $datasetEvaluationId,
             'test_set_size' => $testSetSize,
             'comment' => $comment,
             'parameters' => $parameters,
@@ -93,9 +90,8 @@ class ExecutionService
         // Processor
         Storage::put($execution->processorPath(), Storage::get($execution->dataProcessor->path));
 
-        // Datasets
+        // Dataset
         Storage::put($execution->datasetPath(), Storage::get($execution->dataset->path));
-        Storage::put($execution->datasetEvPath(), Storage::get($execution->datasetEv->path));
 
         // Result directories
         Storage::makeDirectory($execution->resultFiguresPath());

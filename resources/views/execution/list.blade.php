@@ -14,7 +14,6 @@
                     <thead class="border-b">
                         <th class="text-left pb-5">Ime programa</th>
                         <th class="text-left pb-5">Podatki</th>
-                        <th class="text-left pb-5">Podatki za evalvacijo</th>
                         <th class="text-left pb-5">Komentar</th>
                         <th class="text-left pb-5">Datum</th>
                         <th class="text-left pb-5">Akcije</th>
@@ -23,7 +22,6 @@
                     @foreach ($executions as $execution)
                         <tr class="border-t">
                             <td class="py-2">{{ $execution->dataProcessor->name }}</td>
-                            <td class="py-2">{{ $execution->dataset->name }}</td>
                             <td class="py-2">{{ $execution->dataset->name }}</td>
                             <td class="py-2">{{ $execution->comment }}</td>
                             <td class="py-2">{{ $execution->created_at->format('d.m.Y H:i') }}</td>
