@@ -19,7 +19,6 @@ class ProcessorController extends Controller
     {
         return view('processor.list', [
             'processors' => $user->programs()->paginate(10),
-            'dependencies' => $dependencyService->parseDependencies()
         ]);
     }
 

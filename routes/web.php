@@ -32,4 +32,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('execution','ExecutionController',
         ['only' => ['index', 'create', 'show']]
     );
+
+    Route::resource('dependency','DependencyController',
+        ['only' => ['index', 'create']]
+    );
 });

@@ -12,7 +12,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-5 sm:p-6">
                 <table class="container table-auto mb-4">
                     <thead class="border-b">
-                        <th class="text-left pb-5">Ime</th>
+                        <th class="text-left pb-5">Podatki</th>
                         <th class="text-left pb-5">Ime datoteke</th>
                         <th class="text-left pb-5">Velikost</th>
                         <th class="text-left pb-5">Naloženo</th>

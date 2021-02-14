@@ -14,12 +14,12 @@
             <x-jet-input-error for="name" class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="e_path" value="Osnovna pot / direktorij za izvajanje" />
+            <x-jet-label for="e_path" value="Direktorij programa" />
             <x-jet-input id="program-path" type="text" class="mt-1 block w-full" wire:model.lazy="e_path"/>
             <x-jet-input-error for="e_path" class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="e_path_result_figures" value="Mapa rezultatov (.png)" />
+            <x-jet-label for="e_path_result_figures" value="Mapa slik (.png)" />
             <x-jet-input id="program-path-result-figures" type="text" class="mt-1 block w-full" wire:model.lazy="e_path_result_figures"/>
             <x-jet-input-error for="e_path_result_figures" class="mt-2" />
         </div>
@@ -45,7 +45,7 @@
             <x-jet-input-error for="level" class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="comment" value="Komentar - opcijskso" />
+            <x-jet-label for="comment" value="Komentar - opcijsko" />
             <x-jet-input id="program-comment" type="text" class="mt-1 block w-full" wire:model.lazy="comment"/>
             <x-jet-input-error for="comment" class="mt-2" />
         </div>

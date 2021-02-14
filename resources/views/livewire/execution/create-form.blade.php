@@ -46,12 +46,12 @@
             <x-jet-input-error for="test_set_size," class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="parameters" value="Parametri ločeni z vejico - opcijskso" />
+            <x-jet-label for="parameters" value="Parametri ločeni z vejico - opcijsko" />
             <x-jet-input id="execution-parameters" type="text" class="mt-1 block w-full" wire:model.lazy="parameters"/>
             <x-jet-input-error for="parameters" class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="comment" value="Komentar - opcijskso" />
+            <x-jet-label for="comment" value="Komentar - opcijsko" />
             <x-jet-input id="execution-comment" type="text" class="mt-1 block w-full" wire:model.lazy="comment"/>
             <x-jet-input-error for="comment" class="mt-2" />
         </div>

@@ -21,6 +21,9 @@
                     <x-jet-nav-link href="{{ route('dataset.index') }}" :active="request()->routeIs('dataset.index')">
                         Podatki
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('dependency.index') }}" :active="request()->routeIs('dependency.index')">
+                        Zunanje knjižnice
+                    </x-jet-nav-link>
                 </div>
             </div>
 

@@ -2,39 +2,51 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Collection;
+use App\Models\Dependency;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class DependencyService
 {
-    /** @var string */
-    protected $filePath;
+    /** @var PythonService */
+    protected $pythonService;
 
     public function __construct(PythonService $pythonService)
     {
-        $this->filePath = $pythonService->requirementsBasePath();
+        $this->pythonService = $pythonService;
     }
 
-    public function parseDependencies(): Collection
+    public function deleteOldFile(): void
     {
-        $dependencyCollection = new Collection();
+        Storage::delete($this->pythonService->requirementsBasePath());
+    }
 
-        try {
-            $dependencyFile = Storage::get($this->filePath);
-            $dependencyArray = explode(PHP_EOL, $dependencyFile);
+    public function regenerateFile(): void
+    {
+        $this->deleteOldFile();
 
-            foreach ($dependencyArray as $item) {
-                $itemParts = explode('==', $item);
-                if (count($itemParts) == 2) {
-                    $dependencyCollection->put($itemParts[0], $itemParts[1]);
-                }
-            }
-
-            return $dependencyCollection;
-        } catch (FileNotFoundException $fileNotFoundException) {
+        $content = "";
+        foreach (Dependency::all() as $dependency) {
+            $content .= sprintf("%s==%s\n", $dependency->name, $dependency->version);
         }
 
-        return $dependencyCollection;
+        Storage::put($this->pythonService->requirementsBasePath(), $content);
+    }
+
+    public function syncDependencies(): void
+    {
+        Dependency::truncate();
+
+        $dependencyFile = Storage::get($this->pythonService->requirementsBasePath());
+        $dependencyArray = explode(PHP_EOL, $dependencyFile);
+
+        foreach ($dependencyArray as $item) {
+            $itemParts = explode('==', $item);
+            if (count($itemParts) == 2) {
+                Dependency::insert([
+                    'name' => $itemParts[0],
+                    'version' => $itemParts[1],
+                ]);
+            }
+        }
     }
 }

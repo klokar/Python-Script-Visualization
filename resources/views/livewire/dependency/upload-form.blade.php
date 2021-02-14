@@ -1,23 +1,13 @@
-<x-jet-form-section submit="uploadDataset">
+<x-jet-form-section submit="uploadDependencies">
     <x-slot name="title">
-        Nalaganje podatkov
+        Nalaganje datoteke
     </x-slot>
 
     <x-slot name="description">
-        Tukaj lahko naložite nabor podatkov, ki se bo uporabil ob samem izvajanju.
+        Spodnja datoteka bo prepisala ves seznam zato bodite previdni.
     </x-slot>
 
     <x-slot name="form">
-        <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="name" value="Naslov podatkov" />
-            <x-jet-input id="dataset-name" type="text" class="mt-1 block w-full" wire:model.lazy="name"/>
-            <x-jet-input-error for="name" class="mt-2" />
-        </div>
-        <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="comment" value="Komentar - opcijsko" />
-            <x-jet-input id="dataset-comment" type="text" class="mt-1 block w-full" wire:model.lazy="comment"/>
-            <x-jet-input-error for="comment" class="mt-2" />
-        </div>
         <div class="col-span-6 sm:col-span-4">
             <label class="container flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-red-500">
                 <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

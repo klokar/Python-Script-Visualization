@@ -12,9 +12,9 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-5 sm:p-6">
                 <table class="container table-auto mb-4">
                     <thead class="border-b">
-                        <th class="text-left pb-5">Ime</th>
-                        <th class="text-left pb-5">Osnovna pot / direktorij</th>
-                        <th class="text-left pb-5">Rezultati (.png)</th>
+                        <th class="text-left pb-5">Ime programa</th>
+                        <th class="text-left pb-5">Direktorij programa</th>
+                        <th class="text-left pb-5">Slike (.png)</th>
                         <th class="text-left pb-5">Rezultati (.csv)</th>
                         <th class="text-left pb-5">Nivoji SVM</th>
                         <th class="text-left pb-5">Naloženo</th>
@@ -37,31 +37,6 @@
                     </tbody>
                 </table>
                 {{ $processors->links() }}
-            </div>
-        </div>
-    </div>
-    <div class="pb-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-6 pb-6">
-                <div class="px-6 py-4 rounded-b-md text-xs text-gray uppercase bg-gray-200 tracking-widest w-max mb-6">Seznam dependencijev</div>
-                @if(empty($dependencies))
-                    <div class="container">Dependenciji niso naloženi ali pa je napaka v datoteki!</div>
-                @else
-                    <table class="container table-auto mb-4">
-                        <thead class="border-b">
-                            <th class="text-left pb-5">Ime</th>
-                            <th class="text-left pb-5">Verzija</th>
-                        </thead>
-                        <tbody>
-                        @foreach ($dependencies as $name => $version)
-                            <tr class="border-t">
-                                <td class="py-2">{{ $name }}</td>
-                                <td class="py-2">{{ $version }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                @endif
             </div>
         </div>
     </div>

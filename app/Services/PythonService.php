@@ -13,9 +13,9 @@ class PythonService implements ProgramExecutorServiceInterface
 {
     use ProcessRunner;
 
-    protected const PYTHON_EXECUTABLE = 'python3';
-    protected const DEPENDENCIES_CACHE_FOLDER = 'cache';
-    protected const DEPENDENCIES_REQUIREMENTS_FILE = 'requirements.txt';
+    const PYTHON_EXECUTABLE = 'python3';
+    const DEPENDENCIES_CACHE_FOLDER = 'cache';
+    const DEPENDENCIES_REQUIREMENTS_FILE = 'requirements.txt';
 
     protected $out;
 
@@ -130,12 +130,12 @@ class PythonService implements ProgramExecutorServiceInterface
         $this->out->success($execution, 'Requirements handled: ' . $this->requirementsPath());
     }
 
-    protected function dependenciesPath(): string // app/python/dependencies
+    public function dependenciesPath(): string // app/python/dependencies
     {
         return sprintf('%s/dependencies', $this->storagePath());
     }
 
-    protected function dependenciesBasePath(): string // python/dependencies
+    public function dependenciesBasePath(): string // python/dependencies
     {
         return sprintf('%s/dependencies', $this->basePath());
     }

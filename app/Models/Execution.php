@@ -209,15 +209,13 @@ class Execution extends Model
         return sprintf('%s/%s', $this->executionPath(), $this->dataProcessor->e_path_result_data);
     }
 
-    public function detailsProcessingPath(): string
+    public function detailsProcessingPath(): string // executions/hash/iris/data.json
     {
-//        return sprintf('%s/%s', $this->basePath(), $this->dataProcessor->e_path_program_details);
         return sprintf('%s/%s', $this->executionPath(), self::PROCESSING_DETAILS_FILENAME);
     }
 
-    public function detailsEvaluationPath(): string
+    public function detailsEvaluationPath(): string // executions/hash/iris/data_ev.json
     {
-//        return sprintf('%s/%s', $this->basePath(), $this->dataProcessor->e_path_evaluation_details);
         return sprintf('%s/%s', $this->executionPath(), self::EVALUATION_DETAILS_FILENAME);
     }
 }
