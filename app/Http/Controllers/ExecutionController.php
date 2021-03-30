@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use ZipArchive;
 use Carbon\Carbon;
 use App\Models\Execution;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\GenerateReportRequest;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ExecutionController extends Controller
 {
@@ -70,12 +73,37 @@ class ExecutionController extends Controller
         return view('execution.output', ['output' => $execution->output(), 'execution' => $execution]);
     }
 
+    public function downloadFiles(Authenticatable $user, $id)
+    {
+        /** @var Execution $execution */
+        $execution = $user->executions()->findOrFail($id);
+
+        $zip = new ZipArchive;
+        $dir = 'archive';
+
+        if (!file_exists($dir)) {
+            mkdir($dir);
+        }
+
+        $fileName = sprintf('%s/%s.zip', $dir, $execution->hash);
+
+        if (true === ($zip->open(public_path($fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE))) {
+            foreach (Storage::allFiles($execution->basePath()) as $file) {
+                $zip->addFile(public_path($file), basename($file));
+            }
+        }
+
+        $zip->close();
+
+        return response()->download(public_path($fileName));
+    }
+
     /**
      * @param GenerateReportRequest $request
      * @param Authenticatable       $user
      * @param                       $id
      *
-     * @return Response|View
+     * @return Response|View|BinaryFileResponse
      */
     public function report(GenerateReportRequest $request, Authenticatable $user, $id)
     {
@@ -88,7 +116,7 @@ class ExecutionController extends Controller
             $imageTitles[$hashUrls[$hash]] = $title;
         }
 
-        if($request->isDownload()) {
+        if($request->isDownloadReport()) {
             $pdf = app('snappy.pdf.wrapper')->loadView('execution.report-pdf', [
                 'title' => $request->getTitle(),
                 'description' => $request->getDescription(),

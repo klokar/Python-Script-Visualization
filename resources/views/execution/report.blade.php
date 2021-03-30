@@ -7,8 +7,15 @@
             @component('components.ibutton', [
                 'url' => '/execution/'.$execution->id.'/output',
                 'fa' => 'fa-align-left',
-                'text' => '',
+                'text' => 'Izhodni podatki',
                 'color' => 'gray',
+                'class' => 'mr-2'
+            ])@endcomponent
+            @component('components.ibutton', [
+                'url' => '/execution/'.$execution->id.'/download-files',
+                'fa' => 'fa-folder',
+                'text' => 'Prenos datotek',
+                'color' => 'red',
                 'class' => 'mr-2'
             ])@endcomponent
         </div>
@@ -55,11 +62,11 @@
                         <div>
                             <button name="action" value="download" class="h-8 mt-4 px-4 py-2 rounded-md transition ease-in-out duration-150 font-semibold text-xs text-white uppercase tracking-widest bg-red-500">
                                 <i class="fa fa-arrow-down"></i>
-                                Prenesi
+                                Prenesi poročilo
                             </button>
                             <button name="action" value="view" class="h-8 mt-4 px-4 py-2 rounded-md transition ease-in-out duration-150 font-semibold text-xs text-white uppercase tracking-widest bg-green-500">
                                 <i class="fa fa-eye"></i>
-                                Poglej
+                                Poglej poročilo
                             </button>
                         </div>
                     </div>

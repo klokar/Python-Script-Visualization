@@ -20,7 +20,7 @@ class GenerateReportRequest extends FormRequest
         ];
     }
 
-    public function isDownload(): string
+    public function isDownloadReport(): string
     {
         return $this->has('action') && $this->get('action') === 'download';
     }

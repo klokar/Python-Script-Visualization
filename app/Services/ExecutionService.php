@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use ZipArchive;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Execution;
@@ -142,5 +143,22 @@ class ExecutionService
         $this->runProcess($execution, $process, $this->out, $displayTrace);
 
         $this->out->success($execution, 'Execution complete: '.implode(' ', $commands));
+    }
+
+    public function executionZip(Execution $execution): string
+    {
+        $zip = new ZipArchive;
+        $fileName = sprintf('%s.zip', $execution->hash);
+
+        if (true === ($zip->open(public_path($fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE))) {
+            foreach (Storage::allFiles($execution->basePath()) as $file) {
+                $relativeNameInZipFile = basename($file);
+                $zip->addFile(public_path($file), $relativeNameInZipFile);
+            }
+        }
+
+        $zip->close();
+
+        return public_path($fileName);
     }
 }
