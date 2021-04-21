@@ -4,7 +4,7 @@
     </x-slot>
 
     <x-slot name="description">
-        Tukaj lahko bo na seznam dodan spodnji vnos.
+        Dodajanje knjižnic, ki se uporabljajo za izvajanje programa v Pythonu.
     </x-slot>
 
     <x-slot name="form">
@@ -14,7 +14,7 @@
             <x-jet-input-error for="name" class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="version" value="Verzija" />
+            <x-jet-label for="version" value="Različica" />
             <x-jet-input id="dependency-version" type="text" class="mt-1 block w-full" wire:model.lazy="version"/>
             <x-jet-input-error for="version" class="mt-2" />
         </div>

@@ -22,7 +22,7 @@
                         Podatki
                     </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('dependency.index') }}" :active="request()->routeIs('dependency.index')">
-                        Zunanje knjižnice
+                        Python-knjižnice
                     </x-jet-nav-link>
                 </div>
             </div>

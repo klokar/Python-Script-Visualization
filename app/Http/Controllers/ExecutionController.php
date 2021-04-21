@@ -43,6 +43,8 @@ class ExecutionController extends Controller
 
         return view('execution.report', [
             'execution' => $execution,
+            'program' => $execution->dataProcessor,
+            'dataset' => $execution->dataset,
             'p_details' => $execution->programDetails(),
             'e_details' => $execution->evaluationDetails(),
             'images' => $execution->resultImages()
@@ -121,6 +123,9 @@ class ExecutionController extends Controller
                 'title' => $request->getTitle(),
                 'description' => $request->getDescription(),
                 'images' => $imageTitles,
+                'execution' => $execution,
+                'program' => $execution->dataProcessor,
+                'dataset' => $execution->dataset,
                 'p_details' => $execution->programDetails(),
                 'e_details' => $execution->evaluationDetails(),
             ]);
@@ -131,6 +136,9 @@ class ExecutionController extends Controller
                 'title' => $request->getTitle(),
                 'description' => $request->getDescription(),
                 'images' => $imageTitles,
+                'execution' => $execution,
+                'program' => $execution->dataProcessor,
+                'dataset' => $execution->dataset,
                 'p_details' => $execution->programDetails(),
                 'e_details' => $execution->evaluationDetails(),
             ]);

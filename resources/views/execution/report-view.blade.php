@@ -25,12 +25,74 @@
             </pre>
 
             <div class="mt-12">
+                <div class="px-6 py-4 rounded-md text-xs text-gray uppercase bg-gray-200 tracking-widest w-max mb-6 mx-auto">Program</div>
+                <table class="container table-fixed mb-4 text-left">
+                    <tr class="border-t">
+                        <td class="py-2 w-1/2">Ime programa</td>
+                        <td class="py-2 w-1/2">{{ $program->name }}</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-2">Direktorij programa</td>
+                        <td class="py-2">{{ $program->e_path }}</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-2">Mapa slik</td>
+                        <td class="py-2">{{ $program->e_path_result_figures }}</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-2">Mapa rezultatov</td>
+                        <td class="py-2">{{ $program->e_path_result_data }}</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-2">Število nivojev za model SVM</td>
+                        <td class="py-2">{{ $program->level }}</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-2">Komentar</td>
+                        <td class="py-2">{{ $program->comment }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-12">
+                <div class="px-6 py-4 rounded-md text-xs text-gray uppercase bg-gray-200 tracking-widest w-max mb-6 mx-auto">Podatki</div>
+                <table class="container table-fixed mb-4 text-left">
+                    <tr class="border-t">
+                        <td class="py-2 w-1/2">Naslov podatkov</td>
+                        <td class="py-2 w-1/2">{{ $dataset->name }}</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-2">Komentar</td>
+                        <td class="py-2">{{ $dataset->comment }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-12">
+                <div class="px-6 py-4 rounded-md text-xs text-gray uppercase bg-gray-200 tracking-widest w-max mb-6 mx-auto">Izvajanje</div>
+                <table class="container table-fixed mb-4 text-left">
+                    <tr class="border-t">
+                        <td class="py-2 w-1/2">Velikost testne množice v %</td>
+                        <td class="py-2 w-1/2">{{ $execution->test_set_size }}</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-2">Parametri, ločeni z vejico</td>
+                        <td class="py-2">{{ $execution->parameters }}</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-2">Komentar</td>
+                        <td class="py-2">{{ $execution->comment }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-12">
                 <div class="px-6 py-4 rounded-md text-xs text-gray uppercase bg-gray-200 tracking-widest w-max mb-6 mx-auto">Parametri izvajanja</div>
-                <table class="container table-auto mb-4 text-left">
+                <table class="container table-fixed mb-4 text-left">
                     @foreach ($p_details as $key => $value)
                         <tr class="border-t">
-                            <td class="py-2">{{ $key }}</td>
-                            <td class="py-2">{{ is_array($value) ? implode(', ', $value) : $value }}</td>
+                            <td class="py-2 w-1/2">{{ $key }}</td>
+                            <td class="py-2 w-1/2">{{ is_array($value) ? implode(', ', $value) : $value }}</td>
                         </tr>
                     @endforeach
                 </table>
@@ -38,11 +100,11 @@
 
             <div class="mt-12">
                 <div class="px-6 py-4 rounded-md text-xs text-gray uppercase bg-gray-200 tracking-widest w-max mb-6 mx-auto">Podatki o evalvaciji</div>
-                <table class="container table-auto mb-4 text-left">
+                <table class="container table-fixed mb-4 text-left">
                     @foreach ($e_details as $key => $value)
                         <tr class="border-t">
-                            <td class="py-2">{{ $key }}</td>
-                            <td class="py-2">{{ is_array($value) ? implode(', ', $value) : $value }}</td>
+                            <td class="py-2 w-1/2">{{ $key }}</td>
+                            <td class="py-2 w-1/2">{{ is_array($value) ? implode(', ', $value) : $value }}</td>
                         </tr>
                     @endforeach
                 </table>

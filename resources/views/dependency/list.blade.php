@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Zunanje knjižnice
+            Python-knjižnice
         </h2>
         @component('components.ibutton', ['url' => '/dependency/create', 'fa' => 'fa-plus', 'text' => 'Dodaj'])
         @endcomponent

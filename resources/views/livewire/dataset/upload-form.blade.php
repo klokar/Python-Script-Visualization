@@ -9,12 +9,12 @@
 
     <x-slot name="form">
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="name" value="Naslov podatkov" />
+            <x-jet-label for="name" value="Naslov podatkov, ki so shranjeni v datoteki .csv." />
             <x-jet-input id="dataset-name" type="text" class="mt-1 block w-full" wire:model.lazy="name"/>
             <x-jet-input-error for="name" class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
-            <x-jet-label for="comment" value="Komentar - opcijsko" />
+            <x-jet-label for="comment" value="Komentar, ki se izpiše v poročilu." />
             <x-jet-input id="dataset-comment" type="text" class="mt-1 block w-full" wire:model.lazy="comment"/>
             <x-jet-input-error for="comment" class="mt-2" />
         </div>
