@@ -4,7 +4,7 @@
     </x-slot>
 
     <x-slot name="description">
-        Tukaj lahko naložite program, ki se bo uporabil ob samem izvajanju.
+        Vnos direktorijev za izvajanje programa in uvoz datoteke.
     </x-slot>
 
     <x-slot name="form">

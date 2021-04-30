@@ -4,7 +4,7 @@
     </x-slot>
 
     <x-slot name="description">
-        Tukaj lahko naložite nabor podatkov, ki se bo uporabil ob samem izvajanju.
+        Uvoz datotek s podatki, ki so uporabljeni pri izvajanju programa.
     </x-slot>
 
     <x-slot name="form">

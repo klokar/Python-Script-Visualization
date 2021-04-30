@@ -5,7 +5,7 @@
 
     <x-slot name="description">
         <ul class="text-sm">
-            <li class="italic text-gray-500">Izbira programa, podatkov in nastavitev velikosti testne množice v %.</li>
+            <li class="italic text-gray-500">Izbira programa, podatkov, nastavitev velikosti testne množice v % in vpis dodatnih parametrov.</li>
         </ul>
         <div class="mt-6">
             <div>Primer uporabe parametrov:</div>
@@ -15,30 +15,10 @@
             </div>
             <div class="text-sm mt-2 ml-2">
                 <span class="font-semibold">V programu bo:</span>
-                <span class="italic text-gray-500"> p1 = parameters[2][5] enak 'test1', in p2 = parameters[2][6] enak 70</span>
-            </div>
-        </div>
-        <div class="mt-6">
-            <div>Parametri, ki so določeni v programu so:</div>
-            <div class="text-sm mt-2 ml-2">
-                <span class="font-semibold">parameters</span>
-                <span class="italic text-gray-500">= main(sys.argv[1:])</span>
-            </div>
-            <div class="text-sm mt-2 ml-2">
-                <span class="font-semibold">dirFigures</span>
-                <span class="italic text-gray-500">= parameters[2][1]</span>
-            </div>
-            <div class="text-sm mt-2 ml-2">
-                <span class="font-semibold">dirResults</span>
-                <span class="italic text-gray-500">= parameters[2][2]</span>
-            </div>
-            <div class="text-sm mt-2 ml-2">
-                <span class="font-semibold">level</span>
-                <span class="italic text-gray-500">= parameters[2][3]</span>
-            </div>
-            <div class="text-sm mt-2 ml-2">
-                <span class="font-semibold">test_s</span>
-                <span class="italic text-gray-500">= int(parameters[2][4])/100</span>
+                <br>
+                <span class="italic text-gray-500"> p1 = parameters[2][5] enako 'test1'</span>
+                <br>
+                <span class="italic text-gray-500"> p2 = parameters[2][6] enako 70</span>
             </div>
         </div>
     </x-slot>
