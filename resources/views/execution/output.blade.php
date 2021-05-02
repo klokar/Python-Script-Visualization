@@ -9,9 +9,18 @@
                 'fa' => 'fa-eye',
                 'text' => '',
                 'color' => 'green',
-                'class' => 'mr-2'
+                'class' => 'mr-2',
+                'tooltip' => 'Ogled poročila'
             ])@endcomponent
             @livewire('execution.run', ['execution_id' => $execution->id])
+            @component('components.ibutton', [
+                'url' => '/processor/'.$processor->id.'/edit',
+                'fa' => 'fa-exchange-alt',
+                'text' => '',
+                'color' => 'gray',
+                'class' => 'mr-2',
+                'tooltip' => 'Zamenjava programa'
+            ])@endcomponent
         </div>
     </x-slot>
 

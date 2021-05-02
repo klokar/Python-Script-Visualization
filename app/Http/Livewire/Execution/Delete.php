@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire\Execution;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Execution;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class Delete extends Component
 {
@@ -27,9 +30,15 @@ class Delete extends Component
         $this->confirming = true;
     }
 
-    public function deleteEntry()
+    public function deleteEntry(Authenticatable $user)
     {
-        Execution::destroy([$this->execution_id]);
+        /** @var User $user */
+        $execution = $user->executions()->findOrFail($this->execution_id);
+
+        /** @var Execution $execution */
+        Storage::deleteDirectory($execution->basePath());
+
+        $execution->delete();
 
         return redirect()
             ->to('execution');

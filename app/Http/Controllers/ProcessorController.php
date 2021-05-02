@@ -29,4 +29,12 @@ class ProcessorController extends Controller
     {
         return view('processor.upload');
     }
+
+    /**
+     * @return View
+     */
+    public function edit()
+    {
+        return view('processor.replace');
+    }
 }

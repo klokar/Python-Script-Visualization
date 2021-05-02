@@ -17,7 +17,7 @@
                         <th class="text-left pb-5">Slike (.png)</th>
                         <th class="text-left pb-5">Rezultati (.csv)</th>
                         <th class="text-left pb-5">Nivoji SVM</th>
-                        <th class="text-left pb-5">Naloženo</th>
+                        <th class="text-left pb-5">Posodobljeno</th>
                         <th class="text-left pb-5">Akcije</th>
                     </thead>
                     <tbody>
@@ -28,8 +28,16 @@
                             <td class="py-2">{{ $processor->e_path_result_figures }}</td>
                             <td class="py-2">{{ $processor->e_path_result_data }}</td>
                             <td class="py-2">{{ $processor->level }}</td>
-                            <td class="py-2">{{ $processor->created_at->format('d.m.Y') }}</td>
-                            <td class="py-2">
+                            <td class="py-2">{{ $processor->updated_at->format('d.m.Y') }}</td>
+                            <td class="py-2 flex">
+                                @component('components.ibutton', [
+                                    'url' => '/processor/'.$processor->id.'/edit',
+                                    'fa' => 'fa-exchange-alt',
+                                    'text' => '',
+                                    'color' => 'gray',
+                                    'class' => 'mr-2',
+                                    'tooltip' => 'Zamenjava datoteke'
+                                ])@endcomponent
                                 @livewire('processor.delete', ['processor_id' => $processor->id])
                             </td>
                         </tr>

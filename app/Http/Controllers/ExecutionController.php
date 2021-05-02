@@ -72,7 +72,7 @@ class ExecutionController extends Controller
         /** @var Execution $execution */
         $execution = $user->executions()->findOrFail($id);
 
-        return view('execution.output', ['output' => $execution->output(), 'execution' => $execution]);
+        return view('execution.output', ['output' => $execution->output(), 'execution' => $execution, 'processor' => $execution->dataProcessor]);
     }
 
     public function downloadFiles(Authenticatable $user, $id)

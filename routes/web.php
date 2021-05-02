@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('processor','ProcessorController',
-        ['only' => ['index', 'create']]
+        ['only' => ['index', 'create', 'edit']]
     );
 
     Route::resource('dataset','DatasetController',

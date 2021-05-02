@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire\Dataset;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Dataset;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class Delete extends Component
 {
@@ -24,14 +27,18 @@ class Delete extends Component
     {
         $this->resetErrorBag();
 
-//        $this->dispatchBrowserEvent('confirming-delete-user');
-
         $this->confirming = true;
     }
 
-    public function deleteEntry() {
+    public function deleteEntry(Authenticatable $user) {
 
-        Dataset::destroy([$this->dataset_id]);
+        /** @var User $user */
+        $dataset = $user->datasets()->findOrFail($this->dataset_id);
+
+        /** @var Dataset $dataset */
+        Storage::delete($dataset->path);
+
+        $dataset->delete();
 
         return redirect()
             ->to('dataset');

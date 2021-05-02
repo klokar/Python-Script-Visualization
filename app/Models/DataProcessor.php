@@ -30,7 +30,7 @@ class DataProcessor extends Model
      */
     protected $fillable = [
         'name', 'path', 'e_path', 'e_path_result_figures', 'e_path_result_data', 'e_path_program_details',
-        'e_path_evaluation_details', 'level', 'comment'
+        'e_path_evaluation_details', 'level', 'comment', 'updated_at'
     ];
 
     /**
