@@ -148,7 +148,7 @@
                         <textarea name="description" type="text" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
                         </textarea>
                     </div>
-                    <div class="mt-8 grid grid-flow-row grid-cols-3 grid-rows-4 gap-x-4">
+                    <div class="mt-8 grid grid-flow-row grid-cols-3 gap-x-4">
                         @foreach ($images as $hash => $path)
                             <div>
                                 <a @click="$dispatch('img-modal', {  imgModalSrc: '/{{ $path }}', imgModalDesc: '' })" class="cursor-pointer">
