@@ -1,3 +1,3 @@
-# Bachelor's Degree Programme Assignment
+## Bachelor's Degree Programme Assignment
 
 The diploma thesis includes planning and development of web application for execution of Python programs. Main functionalities are simplicity of usage, program or data file uploading and inputs for defining execution parameters. When execution is completed, there is additional option to export results in form of files or report with selection of text and images. To support multiple users, registration and login system is available which allows modification of user account details. Application is implemented by using PHP programming language, Laravel framework and MariaDB database. Correct frontend user experience is achieved with Blade templates and help of Laravel Livewire library. Final application test performed with machine learning algorithm SVM, has shown itself as successful and displayed correct results.
